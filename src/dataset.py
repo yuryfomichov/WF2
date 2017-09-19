@@ -1,6 +1,7 @@
 import torch.utils.data as data
 from PIL import Image
 import os
+import torch as torch
 import os.path
 import torchvision.transforms as transforms
 
@@ -14,9 +15,10 @@ class ImdbDataset(data.Dataset):
         img = Image.open(os.path.join(self.image_folder, item[27])).convert('RGB')
         img_transformator = self._image_transform()
         img = img_transformator(img)
-
+        features = [[item[0]]+ [item[2]]+ item[6:27]][0]
+        features = [int(x) for x in features]
         # image, item, target
-        return img, int(item[1])
+        return img, torch.FloatTensor(features), int(item[1])
 
     def __len__(self):
         return len(self.data)

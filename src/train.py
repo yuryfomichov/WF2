@@ -47,19 +47,20 @@ class Train(object):
             convert_to_CUDA_time = 0;
             backward_time = 0;
             self.model.train()
-            for t, (x, y) in enumerate(self.loader.get_train_loader()):
+            for t, (x, x1, y) in enumerate(self.loader.get_train_loader()):
                 read_data_time += (time.time() - read_data_tic);
 
                 if torch.cuda.is_available():
                     convert_to_CUDA_tic = time.time()
-                    x, y = x.cuda(async=True), y.cuda(async=True)
+                    x, x1, y = x.cuda(async=True), x1.cuda(async=True), y.cuda(async=True)
                     convert_to_CUDA_time += (time.time() - convert_to_CUDA_tic);
 
                 x_var = Variable(x, requires_grad=False)
+                x1_var = Variable(x1, requires_grad=False)
                 y_var = Variable(y.long())
 
                 forward_time_tic = time.time()
-                scores = self.model(x_var)
+                scores = self.model(x_var, x1_var)
                 loss = loss_fn(scores, y_var)
                 forward_time += (time.time() - forward_time_tic);
 
@@ -98,9 +99,10 @@ class Train(object):
         num_correct = 0
         num_samples = 0
         self.model.eval()
-        for x, y in loader:
+        for x, x1, y in loader:
             x_var = Variable(x.type(self.data_type), volatile=True)
-            scores = self.model(x_var)
+            x1_var = Variable(x1.type(self.data_type), volatile=True)
+            scores = self.model(x_var, x1_var)
             _, preds = scores.data.cpu().max(1)
             num_correct += (preds == y).sum()
             num_samples += preds.size(0)
