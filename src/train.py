@@ -85,7 +85,7 @@ class Train(object):
 
     def check_train_accuracy(self):
         print('Checking accuracy on TRAIN set')
-        return self.check_accuracy(self.loader.get_train_loader(False), 484)
+        return self.check_accuracy(self.loader.get_train_loader(False))
 
     def check_val_accuracy(self):
         print('Checking accuracy on VALIDATION set')
