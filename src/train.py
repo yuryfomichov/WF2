@@ -1,6 +1,6 @@
 import torch as torch
 import time
-from .model import Model
+from model import Model
 from torch.autograd import Variable
 
 
