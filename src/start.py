@@ -1,8 +1,8 @@
 import torch as torch
 import torch.nn as nn
 import torch.optim as optim
-from src.datasetloader import DatasetLoader
-from src.train import Train
+from .datasetloader import DatasetLoader
+from .train import Train
 
 
 def run():
