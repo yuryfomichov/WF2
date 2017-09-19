@@ -17,6 +17,7 @@ class DatasetLoader(object):
         loader = dataloader.DataLoader(ImdbDataset(data, imageFolder),
                                        batch_size=self.batch_size,
                                        num_workers=self.num_workers,
+                                       shuffle=True,
                                        drop_last=drop_last,
                                        pin_memory=torch.cuda.is_available())
         return loader
