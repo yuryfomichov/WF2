@@ -1,7 +1,7 @@
 import torch.utils.data.dataloader as dataloader
 import torch as torch
 import csv
-from .dataset import ImdbDataset
+from dataset import ImdbDataset
 
 class DatasetLoader(object):
     def __init__(self, params):
