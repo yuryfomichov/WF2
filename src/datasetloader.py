@@ -65,8 +65,8 @@ class DatasetLoader(object):
         self.normalize_columns(train_file_data, [2,3,4,5])
         length = len(train_file_data)
 
-        self.test_data = self.slice_data(train_file_data, 0.9, 1, length)
-        self.train_data = train_file_data[0: round(0.9 * length)]
+        self.test_data = self.slice_data(train_file_data, 0.92, 1, length)
+        self.train_data = train_file_data[0: round(0.92 * length)]
         np.random.shuffle(self.train_data)
         length = len(self.train_data)
         self.val_data = self.slice_data(self.train_data, 0.9, 1, length)
