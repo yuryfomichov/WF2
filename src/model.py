@@ -57,8 +57,8 @@ class Model(nn.Module):
     def forward(self, x, x1):
         x = self.features(x)
         x = x.view(x.size(0), -1)
-        #y = self.secondNet(x1)
-        result = torch.cat((x, x1), 1);
+        y = torch.cat((x, x1), 1);
+        result = self.secondNet(y)
 
         return result
 
