@@ -7,7 +7,7 @@ from train import Train
 
 def run():
     loader = DatasetLoader({
-        'batch_size': 242,
+        'batch_size': 294,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     network = Train(loader,

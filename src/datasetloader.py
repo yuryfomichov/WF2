@@ -48,9 +48,10 @@ class DatasetLoader(object):
         for i, lang in enumerate(uniq_values):
             data[data[:, column_index] == lang, column_index] = i
 
-    def normalize_columns(self, data, column_index):
-        column = data[:,column_index].astype(np.float32);
-        data[:, column_index] = ((column - np.amin(column))/column.ptp(0)).astype(np.str)
+    def normalize_columns(self, data, column_index_list):
+        for column_index in column_index_list:
+            column = data[:,column_index].astype(np.float32);
+            data[:, column_index] = ((column - np.amin(column))/column.ptp(0)).astype(np.str)
 
     def _load_data(self):
         train_file_data = self._read_csv(self.train_file)
@@ -61,18 +62,15 @@ class DatasetLoader(object):
         self.prepare_str_column(train_file_data, 3, uniq_countries)
         self.prepare_str_column(train_file_data, 4, uniq_lang)
         self.prepare_str_column(train_file_data, 5, uniq_rate)
-        self.normalize_columns(train_file_data, 2)
-        self.normalize_columns(train_file_data, 3)
-        self.normalize_columns(train_file_data, 4)
-        self.normalize_columns(train_file_data, 5)
+        self.normalize_columns(train_file_data, [2,3,4,5])
         length = len(train_file_data)
 
         self.test_data = self.slice_data(train_file_data, 0.9, 1, length)
         self.train_data = train_file_data[0: round(0.9 * length)]
         np.random.shuffle(self.train_data)
         length = len(self.train_data)
-        self.val_data = self.slice_data(self.train_data, 0.85, 1, length)
-        self.train_data = self.slice_data(self.train_data, 0, 0.85, length)
+        self.val_data = self.slice_data(self.train_data, 0.9, 1, length)
+        self.train_data = self.slice_data(self.train_data, 0, 0.9, length)
         pass
 
     def slice_data(self, data, start, stop, length):
