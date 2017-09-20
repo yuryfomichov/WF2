@@ -12,6 +12,10 @@ class Model(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
             nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
@@ -19,36 +23,33 @@ class Model(nn.Module):
             nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2)
         )
         #self._require_grad_false()
 
         self.classifier = nn.Sequential(
-            nn.Linear(256 * 8 * 8, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(128 * 8 * 8, 512),
+            nn.BatchNorm1d(512),
             nn.ReLU(True),
-            nn.Linear(1024, 1024),
-            nn.BatchNorm1d(1024),
-            nn.ReLU(True),
-            nn.Linear(1024, num_classes),
+            nn.Linear(512, num_classes),
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(23, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(25, 512),
+            nn.BatchNorm1d(512),
             nn.ReLU(True),
-            nn.Linear(1024, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(512, 512),
+            nn.BatchNorm1d(512),
             nn.ReLU(True),
-            nn.Linear(1024, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(512, 512),
+            nn.BatchNorm1d(512),
             nn.ReLU(True),
-            nn.Linear(1024, num_classes),
+            nn.Linear(512, 512),
+            nn.BatchNorm1d(512),
+            nn.ReLU(True),
+            nn.Linear(512, num_classes),
         )
+
         self._initialize_weights()
 
     def forward(self, x, x1):
