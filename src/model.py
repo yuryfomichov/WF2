@@ -59,7 +59,7 @@ class Model(nn.Module):
         x = x.view(x.size(0), -1)
         x = self.classifier(x)
         y = self.secondNet(x1)
-        result = (x + y) / 2;
+        result = (x * 0.3 + y * 0.7);
 
         return result
 
