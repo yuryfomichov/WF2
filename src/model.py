@@ -18,22 +18,22 @@ class Model(nn.Module):
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(64, 96, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(96),
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(96, 128, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(128),
+            nn.Conv2d(128, 196, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(196),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2)
         )
         # self._require_grad_false()
 
         self.classifier = nn.Sequential(
-            nn.Linear(128 * 10 * 10, 1024),
+            nn.Linear(196 * 10 * 10, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(True),
-            nn.Linear(1024, 64),
+            nn.Linear(1024, 196),
         )
 
         self.secondNet = nn.Sequential(
@@ -46,11 +46,11 @@ class Model(nn.Module):
             nn.Linear(512, 512),
             nn.BatchNorm1d(512),
             nn.ReLU(True),
-            nn.Linear(512, 64),
+            nn.Linear(512, 196),
         )
 
         self.combineNet = nn.Sequential(
-            nn.Linear(153, 1024),
+            nn.Linear(417, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(True),
             nn.Linear(1024, 1024),
