@@ -14,9 +14,9 @@ class DatasetLoader(object):
         self.batch_size = params.get("batch_size", 200)
         self.num_workers = params.get("num_workers", 32)
 
-    def _get_loader(self,data, drop_last = False):
+    def _get_loader(self,data, drop_last = False, is_train = True):
         imageFolder = '%s/%s/' % (self.data_dir, self.image_folder)
-        loader = dataloader.DataLoader(ImdbDataset(data, imageFolder),
+        loader = dataloader.DataLoader(ImdbDataset(data, imageFolder, is_train),
                                        batch_size=self.batch_size,
                                        shuffle=True,
                                        num_workers=self.num_workers,
@@ -25,13 +25,13 @@ class DatasetLoader(object):
         return loader
 
     def get_train_loader(self, drop_last = True):
-        return self._get_loader(self.get_data(self.train_file, 0, 0.8), drop_last)
+        return self._get_loader(self.get_data(self.train_file, 0, 0.8), drop_last, True)
 
     def get_val_loader(self):
-        return self._get_loader(self.get_data(self.train_file, 0.8, 1), False)
+        return self._get_loader(self.get_data(self.train_file, 0.8, 1), False, False)
 
     def get_test_loader(self):
-        return self._get_loader(self.get_data(self.self.test_file), False)
+        return self._get_loader(self.get_data(self.self.test_file), False, False)
 
     def get_data(self, file_name, part_start=0.0, part_end=1.0):
         data_file = '%s/%s.csv' % (self.data_dir, file_name)

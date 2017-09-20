@@ -29,7 +29,7 @@ class Model(nn.Module):
             nn.Conv2d(128, 160, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(160),
             nn.ReLU(inplace=True),
-            nn.AvgPool2d(kernel_size=8)
+            nn.AvgPool2d(kernel_size=10)
         )
         #self._require_grad_false()
 
