@@ -19,6 +19,7 @@ def run():
     network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-4, weight_decay=1e-4), num_epochs=10)
     network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-5, weight_decay=1e-4), num_epochs=10)
     network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-6, weight_decay=1e-4), num_epochs=10)
+    network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-7, weight_decay=1e-4), num_epochs=10)
 
 
 run()
