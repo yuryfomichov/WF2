@@ -76,6 +76,7 @@ class DatasetLoader(object):
         self.val_data = self.slice_data(train_file_data, 0.9, 1, length)
         self.train_data = train_file_data[0: round(0.9 * length)]
         np.random.shuffle(self.train_data)
+        self.train_data = self.slice_data(self.train_data, 0, 1, len(self.train_data))
 
         pass
 
