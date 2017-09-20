@@ -14,15 +14,15 @@ class Model(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(32),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
             nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(64, 96, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(96, 128, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2)
@@ -30,10 +30,10 @@ class Model(nn.Module):
         # self._require_grad_false()
 
         self.classifier = nn.Sequential(
-            nn.Linear(128 * 10 * 10, 512),
-            nn.BatchNorm1d(512),
+            nn.Linear(128 * 10 * 10, 1024),
+            nn.BatchNorm1d(1024),
             nn.ReLU(True),
-            nn.Linear(512, num_classes),
+            nn.Linear(1024, 64),
         )
 
         self.secondNet = nn.Sequential(
@@ -46,10 +46,17 @@ class Model(nn.Module):
             nn.Linear(512, 512),
             nn.BatchNorm1d(512),
             nn.ReLU(True),
-            nn.Linear(512, 512),
-            nn.BatchNorm1d(512),
+            nn.Linear(512, 64),
+        )
+
+        self.combineNet = nn.Sequential(
+            nn.Linear(153, 1024),
+            nn.BatchNorm1d(1024),
             nn.ReLU(True),
-            nn.Linear(512, num_classes),
+            nn.Linear(1024, 1024),
+            nn.BatchNorm1d(1024),
+            nn.ReLU(True),
+            nn.Linear(1024, num_classes),
         )
 
         self._initialize_weights()
@@ -59,9 +66,9 @@ class Model(nn.Module):
         x = x.view(x.size(0), -1)
         x = self.classifier(x)
         y = self.secondNet(x1)
-        result = (x * 0.3 + y * 0.7);
+        z = self.combineNet(torch.cat((x,y,x1), 1))
 
-        return result
+        return z
 
     def _initialize_weights(self):
         for m in self.modules():
