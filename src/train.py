@@ -82,6 +82,7 @@ class Train(object):
             self.save_model()
             self.check_val_accuracy()
             self.check_train_accuracy()
+        self.check_test_accuracy()
 
     def check_train_accuracy(self):
         print('Checking accuracy on TRAIN set')
