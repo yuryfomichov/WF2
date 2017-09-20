@@ -25,31 +25,31 @@ class Model(nn.Module):
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(128, 64, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(64),
+            nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(256),
             nn.ReLU(inplace=True),
             nn.AvgPool2d(kernel_size=8)
         )
         #self._require_grad_false()
 
         self.classifier = nn.Sequential(
-            nn.Linear(128 * 8 * 8, 512),
-            nn.BatchNorm1d(512),
+            nn.Linear(256, 256),
+            nn.BatchNorm1d(256),
             nn.ReLU(True),
-            nn.Linear(512, num_classes),
+            nn.Linear(256, 64),
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(89, 512),
-            nn.BatchNorm1d(512),
+            nn.Linear(89, 768),
+            nn.BatchNorm1d(768),
             nn.ReLU(True),
-            nn.Linear(512, 512),
-            nn.BatchNorm1d(512),
+            nn.Linear(768, 768),
+            nn.BatchNorm1d(768),
             nn.ReLU(True),
-            nn.Linear(512, 512),
-            nn.BatchNorm1d(512),
+            nn.Linear(768, 768),
+            nn.BatchNorm1d(768),
             nn.ReLU(True),
-            nn.Linear(512, num_classes),
+            nn.Linear(768, num_classes),
         )
 
         self._initialize_weights()
@@ -57,6 +57,7 @@ class Model(nn.Module):
     def forward(self, x, x1):
         x = self.features(x)
         x = x.view(x.size(0), -1)
+        x = self.classifier(x)
         y = torch.cat((x, x1), 1);
         result = self.secondNet(y)
 
