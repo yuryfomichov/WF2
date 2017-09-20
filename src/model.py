@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torchvision.models as models
 import math
+import torch
 
 
 class Model(nn.Module):
@@ -23,7 +24,11 @@ class Model(nn.Module):
             nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2)
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(128, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.AvgPool2d(kernel_size=8)
         )
         #self._require_grad_false()
 
@@ -35,10 +40,7 @@ class Model(nn.Module):
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(25, 512),
-            nn.BatchNorm1d(512),
-            nn.ReLU(True),
-            nn.Linear(512, 512),
+            nn.Linear(89, 512),
             nn.BatchNorm1d(512),
             nn.ReLU(True),
             nn.Linear(512, 512),
@@ -55,9 +57,8 @@ class Model(nn.Module):
     def forward(self, x, x1):
         x = self.features(x)
         x = x.view(x.size(0), -1)
-        x = self.classifier(x)
-        y = self.secondNet(x1)
-        result = (x + y) / 2;
+        #y = self.secondNet(x1)
+        result = torch.cat((x, x1), 1);
 
         return result
 
