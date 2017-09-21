@@ -37,31 +37,31 @@ class Model(nn.Module):
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(25, 512),
-            nn.BatchNorm1d(512),
+            nn.Linear(25, 1024),
+            nn.BatchNorm1d(1024),
             nn.ReLU(True),
-            nn.Linear(512, 512),
-            nn.BatchNorm1d(512),
+            nn.Linear(1024, 1024),
+            nn.BatchNorm1d(1024),
             nn.ReLU(True),
-            nn.Linear(512, 512),
-            nn.BatchNorm1d(512),
+            nn.Linear(1024, 1024),
+            nn.BatchNorm1d(1024),
             nn.ReLU(True),
-            nn.Linear(512, 512),
-            nn.BatchNorm1d(512),
+            nn.Linear(1024, 1024),
+            nn.BatchNorm1d(1024),
             nn.ReLU(True),
-            nn.Linear(512, num_classes),
+            nn.Linear(1024, num_classes),
         )
 
         self._initialize_weights()
 
     def forward(self, x, x1):
-        x = self.features(x)
-        x = x.view(x.size(0), -1)
-        x = self.classifier(x)
+        #x = self.features(x)
+        #x = x.view(x.size(0), -1)
+        #x = self.classifier(x)
         y = self.secondNet(x1)
-        result = (x + y) / 2;
+        #result = (x + y) / 2;
 
-        return result
+        return y
 
     def _initialize_weights(self):
         for m in self.modules():

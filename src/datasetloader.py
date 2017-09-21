@@ -35,7 +35,6 @@ class DatasetLoader(object):
         return self._get_loader(self.test_data, False, False)
 
     def _prepare_data(self, data):
-
         features = data[:, 0:27].astype(np.float32)
         images_urls = data[:, 27:28]
         self.normalize_columns(features, 2)
