@@ -60,16 +60,19 @@ class Train(object):
                 y_var = Variable(y.long())
 
                 forward_time_tic = time.time()
-                scores = self.model(x_var, x1_var)
-                loss = loss_fn(scores, y_var)
+                scores1, scores2 = self.model(x_var, x1_var)
+                loss1 = loss_fn(scores1, y_var)
+                loss2 = loss_fn(scores2, y_var)
                 forward_time += (time.time() - forward_time_tic);
 
                 if (t + 1) % self.print_every == 0:
-                    print('t = %d, loss = %.4f' % (t + 1, loss.data[0]))
+                    print('t = %d, loss = %.4f' % (t + 1, loss1.data[0]))
+                    print('t = %d, loss = %.4f' % (t + 1, loss2.data[0]))
 
                 backward_time_tic = time.time()
                 optimizer.zero_grad()
-                loss.backward()
+                loss1.backward()
+                loss2.backward()
                 optimizer.step()
                 backward_time += (time.time() - backward_time_tic);
                 read_data_tic = time.time()
