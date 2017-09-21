@@ -41,7 +41,7 @@ class Model(nn.Module):
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(47, 1024),
+            nn.Linear(57, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(True),
             nn.Linear(1024, 1024),
