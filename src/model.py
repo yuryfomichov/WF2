@@ -41,7 +41,7 @@ class Model(nn.Module):
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(57, 1024),
+            nn.Linear(82, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(True),
             nn.Linear(1024, 1024),
@@ -62,7 +62,7 @@ class Model(nn.Module):
         x = self.features(x)
         x = x.view(x.size(0), -1)
         #x = self.classifier(x)
-        y = self.secondNet(torch.cat((x, x1), 1))
+        y = self.secondNet(torch.cat((x, x1, x1), 1))
 
         return y
 
