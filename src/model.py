@@ -33,11 +33,11 @@ class Model(nn.Module):
             nn.Linear(128 * 10 * 10, 512),
             nn.BatchNorm1d(512),
             nn.ReLU(True),
-            nn.Linear(512, num_classes),
+            nn.Linear(512, 10),
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(25, 1024),
+            nn.Linear(35, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(True),
             nn.Linear(1024, 1024),
@@ -55,11 +55,10 @@ class Model(nn.Module):
         self._initialize_weights()
 
     def forward(self, x, x1):
-        #x = self.features(x)
-        #x = x.view(x.size(0), -1)
-        #x = self.classifier(x)
-        y = self.secondNet(x1)
-        #result = (x + y) / 2;
+        x = self.features(x)
+        x = x.view(x.size(0), -1)
+        x = self.classifier(x)
+        y = self.secondNet(torch.cat((x, x1), 1))
 
         return y
 
