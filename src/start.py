@@ -78,8 +78,8 @@ def check_accuracy(loader, model1, model2, model3):
         _, preds2 = scores2.data.cpu().max(1)
         _, preds3 = scores3.data.cpu().max(1)
         preds = preds1 + preds2 + preds3;
-        preds[preds > 1] = 1
-        preds[preds <= 1] = 0
+        preds[preds > 0] = 1
+        preds[preds < 1] = 0
         num_correct += (preds == y).sum()
         num_samples += preds.size(0)
 
