@@ -101,5 +101,6 @@ def checkAccAllModels():
     network3.check_test_accuracy()
     check_accuracy(loader.get_test_loader(),network1.model, network2.model, network3.model)
 
+start()
 checkAccAllModels()
 
