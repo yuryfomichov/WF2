@@ -142,14 +142,14 @@ def checkAccAllModels():
     network3 = getNetwork3(False)
     network4 = getNetwork4(False)
     loader = DatasetLoader({
-        'batch_size': 10,
+        'batch_size': 200,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     print('---------------start-----------------')
-    #network1.check_test_accuracy()
-    #network2.check_test_accuracy()
-    #network3.check_test_accuracy()
-    #network4.check_test_accuracy()
+    network1.check_test_accuracy()
+    network2.check_test_accuracy()
+    network3.check_test_accuracy()
+    network4.check_test_accuracy()
     print('Average Probability Accurancy')
     check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network3.model, network4.model],
                    probabilityPrediction)
