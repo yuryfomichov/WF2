@@ -151,16 +151,16 @@ def checkAccAllModels():
     network3.check_test_accuracy()
     network4.check_test_accuracy()
     print('Average Probability Accurancy')
-    check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network4.model],
+    check_accuracy(loader.get_test_loader(), [network1.model, network4.model],
                    probabilityPrediction)
     print('Majority1')
-    check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network4.model],
+    check_accuracy(loader.get_test_loader(), [network1.model, network4.model],
                    majority1)
     print('Majority2')
-    check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network4.model],
+    check_accuracy(loader.get_test_loader(), [network1.model, network4.model],
                    majority2)
     print('Majority3')
-    check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network4.model],
+    check_accuracy(loader.get_test_loader(), [network1.model, network4.model],
     majority3)
 
 
