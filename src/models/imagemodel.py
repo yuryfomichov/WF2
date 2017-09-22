@@ -66,7 +66,6 @@ class ImageModel(nn.Module):
     def forward(self, x, x1):
         x = self.features(x)
         x = x.view(x.size(0), -1)
-        x = self.classifier(x)
         x1 = self.secondNet(x1)
         y = self.combineNet(torch.cat((x, x1), 1))
 
