@@ -11,7 +11,7 @@ from torch.autograd import Variable
 
 def getNetwork1(create_new=True):
     loader = DatasetLoader({
-        'batch_size': 294,
+        'batch_size': 261,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     network = Train(CombinedModel,
