@@ -131,15 +131,15 @@ def majority(x, x1, model1, model2, model3, model4, value):
 
 
 def majority1(x, x1, model1, model2, model3, model4):
-    majority(x, x1, model1, model2, model3, model4, 1)
+    return majority(x, x1, model1, model2, model3, model4, 1)
 
 
 def majority2(x, x1, model1, model2, model3, model4):
-    majority(x, x1, model1, model2, model3, model4, 2)
+    return majority(x, x1, model1, model2, model3, model4, 2)
 
 
 def majority3(x, x1, model1, model2, model3, model4):
-    majority(x, x1, model1, model2, model3, model4, 3)
+    return majority(x, x1, model1, model2, model3, model4, 3)
 
 
 def checkAccAllModels():
