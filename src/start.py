@@ -74,12 +74,12 @@ def check_accuracy(loader, model1, model2, model3):
         scores1 = model1(x_var, x1_var)
         scores2 = model2(x_var, x1_var)
         scores3 = model3(x_var, x1_var)
-        _, preds1 = scores1.data.cpu().max(1)
-        _, preds2 = scores2.data.cpu().max(1)
-        _, preds3 = scores3.data.cpu().max(1)
-        preds = preds1 + preds2 + preds3;
-        preds[preds < 2] = 0
-        preds[preds > 1] = 1
+        probs1 = nn.Softmax()(scores1)
+        probs2 = nn.Softmax()(scores2)
+        probs3 = nn.Softmax()(scores3)
+        probs = probs1 + probs2 + probs3;
+        _, preds = probs.data.cpu().max(1)
+
         num_correct += (preds == y).sum()
         num_samples += preds.size(0)
 
@@ -93,7 +93,7 @@ def checkAccAllModels():
     network2 = getNetwork2(False)
     network3 = getNetwork3(False)
     loader = DatasetLoader({
-        'batch_size': 100,
+        'batch_size': 10,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     print('---------------start-----------------')
@@ -102,6 +102,5 @@ def checkAccAllModels():
     network3.check_test_accuracy()
     check_accuracy(loader.get_test_loader(),network1.model, network2.model, network3.model)
 
-start()
 checkAccAllModels()
 
