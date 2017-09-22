@@ -53,6 +53,7 @@ def trainModel(network):
     network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-2, weight_decay=1e-4), num_epochs=8)
     network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-3, weight_decay=1e-4), num_epochs=8)
     network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-4, weight_decay=1e-4), num_epochs=8)
+    network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-5, weight_decay=1e-5), num_epochs=8)
     return network
 
 
