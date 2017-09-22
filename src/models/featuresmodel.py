@@ -8,7 +8,10 @@ class FeaturesModel(nn.Module):
     def __init__(self, num_classes=2):
         super(FeaturesModel, self).__init__()
         self.classifier = nn.Sequential(
-            nn.Linear(25, 2048),
+            nn.Linear(25, 1024),
+            nn.BatchNorm1d(1024),
+            nn.ReLU(True),
+            nn.Linear(1024, 2048),
             nn.BatchNorm1d(2048),
             nn.ReLU(True),
             nn.Linear(2048, 2048),
@@ -17,13 +20,10 @@ class FeaturesModel(nn.Module):
             nn.Linear(2048, 2048),
             nn.BatchNorm1d(2048),
             nn.ReLU(True),
-            nn.Linear(2048, 2048),
-            nn.BatchNorm1d(2048),
+            nn.Linear(2048, 1024),
+            nn.BatchNorm1d(1024),
             nn.ReLU(True),
-            nn.Linear(2048, 2048),
-            nn.BatchNorm1d(2048),
-            nn.ReLU(True),
-            nn.Linear(2048, num_classes),
+            nn.Linear(1024, num_classes),
         )
 
         self._initialize_weights()
