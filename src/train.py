@@ -1,16 +1,16 @@
 import torch as torch
 import time
-from model import Model
 from torch.autograd import Variable
 
 
 class Train(object):
-    def __init__(self, loader, model_filename='model.pt', create_new=False, print_every=10):
+    def __init__(self, Model, loader, model_filename='model.pt', create_new=False, print_every=10):
         self.data_type = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
         self.model_filename = model_filename
         self.create_new = create_new
         self.print_every = print_every
         self.loader = loader
+        self.Model = Model
         self.init()
 
     def init(self):
@@ -25,7 +25,7 @@ class Train(object):
                 print('No model had been found. New model was created')
 
     def init_model(self):
-        self.model = Model()
+        self.model = self.Model()
         self.model = self.model.type(self.data_type)
 
     def save_model(self):
@@ -60,19 +60,16 @@ class Train(object):
                 y_var = Variable(y.long())
 
                 forward_time_tic = time.time()
-                scores1, scores2 = self.model(x_var, x1_var)
-                loss1 = loss_fn(scores1, y_var)
-                loss2 = loss_fn(scores2, y_var)
+                scores = self.model(x_var, x1_var)
+                loss = loss_fn(scores, y_var)
                 forward_time += (time.time() - forward_time_tic);
 
                 if (t + 1) % self.print_every == 0:
-                    print('t = %d, loss = %.4f' % (t + 1, loss1.data[0]))
-                    print('t = %d, loss = %.4f' % (t + 1, loss2.data[0]))
+                    print('t = %d, loss = %.4f' % (t + 1, loss.data[0]))
 
                 backward_time_tic = time.time()
                 optimizer.zero_grad()
-                loss1.backward()
-                loss2.backward()
+                loss.backward()
                 optimizer.step()
                 backward_time += (time.time() - backward_time_tic);
                 read_data_tic = time.time()
