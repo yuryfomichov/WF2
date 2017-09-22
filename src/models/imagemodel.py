@@ -25,12 +25,13 @@ class ImageModel(nn.Module):
             nn.Conv2d(128, 256 ,kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(256),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2)
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.AvgPool2d(kernel_size=10)
         )
         # self._require_grad_false()
 
         self.classifier = nn.Sequential(
-            nn.Linear(256 * 10 * 10, 1024),
+            nn.Linear(256, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(True),
             nn.Linear(1024, 1024),

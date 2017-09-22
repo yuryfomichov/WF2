@@ -33,11 +33,11 @@ class CombinedModel(nn.Module):
             nn.Linear(192 * 10 * 10, 512),
             nn.BatchNorm1d(512),
             nn.ReLU(True),
-            nn.Linear(512, 25),
+            nn.Linear(512, 32),
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(50, 1024),
+            nn.Linear(82, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(True),
             nn.Linear(1024, 1024),
@@ -58,7 +58,7 @@ class CombinedModel(nn.Module):
         x = self.features(x)
         x = x.view(x.size(0), -1)
         x = self.classifier(x)
-        y = self.secondNet(torch.cat((x, x1), 1))
+        y = self.secondNet(torch.cat((x, x1, x1), 1))
 
         return y
 

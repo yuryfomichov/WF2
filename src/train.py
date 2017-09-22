@@ -11,6 +11,7 @@ class Train(object):
         self.print_every = print_every
         self.loader = loader
         self.Model = Model
+        self.best_acc = 0
         self.init()
 
     def init(self):
@@ -79,8 +80,9 @@ class Train(object):
             print('Forward time t={:0.1f}s'.format(forward_time))
             print('Backward time t={:0.1f}s'.format(backward_time))
 
-            self.save_model()
-            self.check_val_accuracy()
+            acc = self.check_val_accuracy()
+            if (acc >= self.best_acc):
+                self.save_model();
             self.check_train_accuracy()
         self.check_test_accuracy()
 

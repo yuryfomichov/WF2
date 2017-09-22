@@ -11,7 +11,7 @@ from torch.autograd import Variable
 
 def getNetwork1(create_new=True):
     loader = DatasetLoader({
-        'batch_size': 409,
+        'batch_size': 294,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     network = Train(CombinedModel,
@@ -37,7 +37,7 @@ def getNetwork2(create_new=True):
 
 def getNetwork3(create_new=True):
     loader = DatasetLoader({
-        'batch_size': 436,
+        'batch_size': 294,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     network = Train(ImageModel,
@@ -50,9 +50,10 @@ def getNetwork3(create_new=True):
 
 def trainModel(network):
     loss_fn = nn.CrossEntropyLoss().type(network.data_type)
-    network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-2, weight_decay=1e-3), num_epochs=10)
-    network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-3, weight_decay=1e-3), num_epochs=10)
-    network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-4, weight_decay=1e-3), num_epochs=10)
+    network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-2, weight_decay=1e-3), num_epochs=8)
+    network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-3, weight_decay=1e-3), num_epochs=8)
+    network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-4, weight_decay=1e-3), num_epochs=8)
+    network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-5, weight_decay=1e-3), num_epochs=8)
     return network
 
 
@@ -61,7 +62,6 @@ def start():
     network2 = trainModel(getNetwork2())
     network3 = trainModel(getNetwork3())
 
-#start()
 def check_accuracy(loader, model1, model2, model3):
     num_correct = 0
     num_samples = 0
@@ -93,12 +93,15 @@ def checkAccAllModels():
     network2 = getNetwork2(False)
     network3 = getNetwork3(False)
     loader = DatasetLoader({
-        'batch_size': 10,
+        'batch_size': 100,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
+    print('---------------start-----------------')
     network1.check_test_accuracy()
     network2.check_test_accuracy()
     network3.check_test_accuracy()
     check_accuracy(loader.get_test_loader(),network1.model, network2.model, network3.model)
+
+start()
 checkAccAllModels()
 
