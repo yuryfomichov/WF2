@@ -32,7 +32,7 @@ class ImageModel(nn.Module):
             nn.AvgPool2d(kernel_size=10)
         )
 
-        self.secondNet == nn.Sequential(
+        self.secondNet = nn.Sequential(
             nn.Linear(25, 2048),
             nn.BatchNorm1d(2048),
             nn.ReLU(True),
