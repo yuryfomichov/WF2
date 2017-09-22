@@ -11,7 +11,7 @@ from torch.autograd import Variable
 
 def getNetwork1(create_new=True):
     loader = DatasetLoader({
-        'batch_size': 261,
+        'batch_size': 294,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     network = Train(CombinedModel,
@@ -59,8 +59,8 @@ def trainModel(network):
 
 def start():
     network3 = trainModel(getNetwork3())
-    network2 = trainModel(getNetwork2())
     network1 = trainModel(getNetwork1())
+    network2 = trainModel(getNetwork2())
 
 def check_accuracy(loader, model1, model2, model3):
     num_correct = 0
@@ -93,7 +93,7 @@ def checkAccAllModels():
     network2 = getNetwork2(False)
     network3 = getNetwork3(False)
     loader = DatasetLoader({
-        'batch_size': 10,
+        'batch_size': 200,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     print('---------------start-----------------')

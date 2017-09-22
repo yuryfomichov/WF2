@@ -60,7 +60,7 @@ class CombinedModel(nn.Module):
         x = self.classifier(x)
         x1 = self.secondNet(x1)
 
-        y = (x + x1) / 2
+        y = x*0.3 + x1*0.7
 
         return y
 
