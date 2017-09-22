@@ -82,6 +82,7 @@ class Train(object):
 
             acc = self.check_val_accuracy()
             if (acc >= self.best_acc):
+                self.best_acc = acc;
                 self.save_model();
         self.check_train_accuracy()
         self.check_test_accuracy()
