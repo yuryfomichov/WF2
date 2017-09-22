@@ -37,19 +37,19 @@ class CombinedModel(nn.Module):
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(25, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(25, 2048),
+            nn.BatchNorm1d(2048),
             nn.ReLU(True),
-            nn.Linear(1024, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(2048, 2048),
+            nn.BatchNorm1d(2048),
             nn.ReLU(True),
-            nn.Linear(1024, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(2048, 2048),
+            nn.BatchNorm1d(2048),
             nn.ReLU(True),
-            nn.Linear(1024, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(2048, 2048),
+            nn.BatchNorm1d(2048),
             nn.ReLU(True),
-            nn.Linear(1024, num_classes),
+            nn.Linear(2048, num_classes),
         )
 
         self._initialize_weights()

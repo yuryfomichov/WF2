@@ -18,39 +18,39 @@ class ImageModel(nn.Module):
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(64, 96, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(96, 128 ,kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(128, 160 ,kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(160),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(160, 192, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(192),
+            nn.Conv2d(128, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
             nn.AvgPool2d(kernel_size=10)
         )
         # self._require_grad_false()
 
         self.classifier = nn.Sequential(
-            nn.Linear(192, 512),
-            nn.BatchNorm1d(512),
+            nn.Linear(64, 256),
+            nn.BatchNorm1d(256),
             nn.ReLU(True),
-            nn.Linear(512, 32),
+            nn.Linear(256, 32),
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(82, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(57, 2048),
+            nn.BatchNorm1d(2048),
             nn.ReLU(True),
-            nn.Linear(1024, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(2048, 2048),
+            nn.BatchNorm1d(2048),
             nn.ReLU(True),
-            nn.Linear(1024, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(2048, 2048),
+            nn.BatchNorm1d(2048),
             nn.ReLU(True),
-            nn.Linear(1024, num_classes),
+            nn.Linear(2048, num_classes),
         )
 
         self._initialize_weights()
@@ -59,7 +59,7 @@ class ImageModel(nn.Module):
         x = self.features(x)
         x = x.view(x.size(0), -1)
         x = self.classifier(x)
-        y = self.secondNet(torch.cat((x, x1, x1), 1))
+        y = self.secondNet(torch.cat((x, x1), 1))
 
         return y
 
