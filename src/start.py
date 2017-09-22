@@ -102,7 +102,7 @@ def probabilityPrediction(x, x1, models):
     result = None
     for model in models:
         scores = model(x, x1)
-        probs = nn.Softmax()(scores)
+        probs = nn.Softmax()(scores).data.cpu().max(1)
         if (result is None):
             result = probs
         else:
