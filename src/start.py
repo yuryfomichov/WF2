@@ -72,7 +72,7 @@ def trainModel(network):
 
 
 def start():
-    network1 = trainModel(getNetwork1())
+    #network1 = trainModel(getNetwork1())
     network2 = trainModel(getNetwork2())
     network3 = trainModel(getNetwork3())
     network4 = trainModel(getNetwork4())
