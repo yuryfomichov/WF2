@@ -23,7 +23,7 @@ def getNetwork1():
 
 def getNetwork2():
     loader = DatasetLoader({
-        'batch_size': 409,
+        'batch_size': 294,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     network = Train(FeaturesModel,
