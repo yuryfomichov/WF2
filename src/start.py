@@ -73,9 +73,9 @@ def trainModel(network):
 
 def start():
     # network1 = trainModel(getNetwork1())
-    network2 = trainModel(getNetwork2())
+    # network2 = trainModel(getNetwork2())
     # network3 = trainModel(getNetwork3())
-    network4 = trainModel(getNetwork4())
+    # network4 = trainModel(getNetwork4())
     pass
 
 
@@ -135,6 +135,9 @@ def majority2(x, x1, models):
 def majority3(x, x1, models):
     return majority(x, x1, models, 3)
 
+def majority4(x, x1, models):
+    return majority(x, x1, models, 4)
+
 
 def checkAccAllModels():
     network1 = getNetwork1(False)
@@ -162,6 +165,9 @@ def checkAccAllModels():
     print('Majority3')
     check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network3.model, network4.model],
     majority3)
+    print('Majority4')
+    check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network3.model, network4.model],
+                   majority4)
 
 
 start()
