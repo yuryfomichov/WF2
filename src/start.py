@@ -72,26 +72,24 @@ def trainModel(network):
 
 
 def start():
-    #network1 = trainModel(getNetwork1())
-    network2 = trainModel(getNetwork2())
-    #network3 = trainModel(getNetwork3())
-    #network4 = trainModel(getNetwork4())
+    # network1 = trainModel(getNetwork1())
+    # network2 = trainModel(getNetwork2())
+    # network3 = trainModel(getNetwork3())
+    # network4 = trainModel(getNetwork4())
     pass
 
 
-def check_accuracy(loader, model1, model2, model3, model4, predictionFunction):
+def check_accuracy(loader, models, predictionFunction):
     num_correct = 0
     num_samples = 0
-    model1.eval()
-    model2.eval()
-    model3.eval()
-    model4.eval()
+    for model in models:
+        model.eval()
     for x, x1, y in loader:
         x_var = Variable(x.type(torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor),
                          volatile=True)
         x1_var = Variable(x1.type(torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor),
                           volatile=True)
-        preds = predictionFunction(x_var, x1_var, model1, model2, model3, model4)
+        preds = predictionFunction(x_var, x1_var, models)
         num_correct += (preds == y).sum()
         num_samples += preds.size(0)
 
@@ -100,45 +98,41 @@ def check_accuracy(loader, model1, model2, model3, model4, predictionFunction):
     return acc;
 
 
-def probabilityPrediction(x, x1, model1, model2, model3, model4):
-    scores1 = model1(x, x1)
-    scores2 = model2(x, x1)
-    scores3 = model3(x, x1)
-    scores4 = model4(x, x1)
-    probs1 = nn.Softmax()(scores1)
-    probs2 = nn.Softmax()(scores2)
-    probs3 = nn.Softmax()(scores3)
-    probs4 = nn.Softmax()(scores4)
-    probs = probs1 + probs2 + probs3 + probs4;
-    _, preds = probs.data.cpu().max(1)
-    return preds
+def probabilityPrediction(x, x1, models):
+    result = None
+    for model in models:
+        scores = model(x, x1)
+        probs = nn.Softmax()(scores)
+        if (result is None):
+            result = probs
+        else:
+            result += probs
+    return result
+
+def majority(x, x1, models, value):
+    result = None
+    for model in models:
+        scores = model(x, x1)
+        _, preds = scores.data.cpu().max(1)
+        if (result is None):
+            result = preds
+        else:
+            result += preds
+    result[result < value] = 0
+    result[result > 0] = 1
+    return result
 
 
-def majority(x, x1, model1, model2, model3, model4, value):
-    scores1 = model1(x, x1)
-    scores2 = model2(x, x1)
-    scores3 = model3(x, x1)
-    scores4 = model4(x, x1)
-    _, preds1 = scores1.data.cpu().max(1)
-    _, preds2 = scores2.data.cpu().max(1)
-    _, preds3 = scores3.data.cpu().max(1)
-    _, preds4 = scores4.data.cpu().max(1)
-    preds = preds1 + preds2 + preds3 + preds4
-    preds[preds < value] = 0
-    preds[preds > 0] = 1
-    return preds
+def majority1(x, x1, models):
+    return majority(x, x1, models, 1)
 
 
-def majority1(x, x1, model1, model2, model3, model4):
-    return majority(x, x1, model1, model2, model3, model4, 1)
+def majority2(x, x1, models):
+    return majority(x, x1, models, 2)
 
 
-def majority2(x, x1, model1, model2, model3, model4):
-    return majority(x, x1, model1, model2, model3, model4, 2)
-
-
-def majority3(x, x1, model1, model2, model3, model4):
-    return majority(x, x1, model1, model2, model3, model4, 3)
+def majority3(x, x1, models):
+    return majority(x, x1, models, 3)
 
 
 def checkAccAllModels():
@@ -156,17 +150,17 @@ def checkAccAllModels():
     network3.check_test_accuracy()
     network4.check_test_accuracy()
     print('Average Probability Accurancy')
-    check_accuracy(loader.get_test_loader(), network1.model, network2.model, network3.model, network4.model,
+    check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network3.model, network4.model],
                    probabilityPrediction)
     print('Majority1')
-    check_accuracy(loader.get_test_loader(), network1.model, network2.model, network3.model, network4.model,
+    check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network3.model, network4.model],
                    majority1)
     print('Majority2')
-    check_accuracy(loader.get_test_loader(), network1.model, network2.model, network3.model, network4.model,
+    check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network3.model, network4.model],
                    majority2)
     print('Majority3')
-    check_accuracy(loader.get_test_loader(), network1.model, network2.model, network3.model, network4.model,
-                   majority3)
+    check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network3.model, network4.model],
+    majority3)
 
 
 start()
