@@ -30,26 +30,29 @@ class CombinedModel(nn.Module):
         # self._require_grad_false()
 
         self.classifier = nn.Sequential(
-            nn.Linear(192 * 10 * 10, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(192 * 10 * 10, 2024),
+            nn.BatchNorm1d(2024),
             nn.ReLU(True),
-            nn.Linear(1024, num_classes),
+            nn.Linear(2024, 2024),
+            nn.BatchNorm1d(2024),
+            nn.ReLU(True),
+            nn.Linear(2024, num_classes),
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(25, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(25, 2024),
+            nn.BatchNorm1d(2024),
             nn.ReLU(True),
-            nn.Linear(1024, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(2024, 2024),
+            nn.BatchNorm1d(2024),
             nn.ReLU(True),
-            nn.Linear(1024, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(2024, 2024),
+            nn.BatchNorm1d(2024),
             nn.ReLU(True),
-            nn.Linear(1024, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Linear(2024, 2024),
+            nn.BatchNorm1d(2024),
             nn.ReLU(True),
-            nn.Linear(1024, num_classes),
+            nn.Linear(2024, num_classes),
         )
 
         self._initialize_weights()
@@ -60,7 +63,7 @@ class CombinedModel(nn.Module):
         x = self.classifier(x)
         x1 = self.secondNet(x1)
 
-        y = (x + x1) / 2
+        y = x * 0.2 + x1 * 0.8
 
         return y
 
