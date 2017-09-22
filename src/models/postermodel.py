@@ -33,7 +33,7 @@ class PosterModel(nn.Module):
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(128, 1024),
+            nn.Linear(256, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(True),
             nn.Linear(1024, 1024),
