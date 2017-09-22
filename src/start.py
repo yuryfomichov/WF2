@@ -161,13 +161,13 @@ def checkAccAllModels():
                    probabilityPrediction)
     print('Majority1')
     check_accuracy(loader.get_test_loader(), network1.model, network2.model, network3.model, network4.model,
-                   majority1())
+                   majority1)
     print('Majority2')
     check_accuracy(loader.get_test_loader(), network1.model, network2.model, network3.model, network4.model,
-                   majority2())
+                   majority2)
     print('Majority3')
     check_accuracy(loader.get_test_loader(), network1.model, network2.model, network3.model, network4.model,
-                   majority3())
+                   majority3)
 
 
 start()
