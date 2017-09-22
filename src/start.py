@@ -12,7 +12,7 @@ from torch.autograd import Variable
 
 def getNetwork1(create_new=True):
     loader = DatasetLoader({
-        'batch_size': 294,
+        'batch_size': 400,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     network = Train(CombinedModel,
@@ -25,7 +25,7 @@ def getNetwork1(create_new=True):
 
 def getNetwork2(create_new=True):
     loader = DatasetLoader({
-        'batch_size': 294,
+        'batch_size': 400,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     network = Train(FeaturesModel,
@@ -38,7 +38,7 @@ def getNetwork2(create_new=True):
 
 def getNetwork3(create_new=True):
     loader = DatasetLoader({
-        'batch_size': 294,
+        'batch_size': 400,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     network = Train(ImageModel,
@@ -51,7 +51,7 @@ def getNetwork3(create_new=True):
 
 def getNetwork4(create_new=True):
     loader = DatasetLoader({
-        'batch_size': 294,
+        'batch_size': 400,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     network = Train(PosterModel,
@@ -73,10 +73,10 @@ def trainModel(network):
 
 
 def start():
-    # network1 = trainModel(getNetwork1())
-    # network2 = trainModel(getNetwork2())
-    # network3 = trainModel(getNetwork3())
-    # network4 = trainModel(getNetwork4())
+    network1 = trainModel(getNetwork1())
+    network2 = trainModel(getNetwork2())
+    network3 = trainModel(getNetwork3())
+    network4 = trainModel(getNetwork4())
     pass
 
 

@@ -71,17 +71,17 @@ class DatasetLoader(object):
         # self.val_data = self.slice_data(self.train_data, 0.9, 1, length)
         # self.train_data = self.slice_data(self.train_data, 0, 0.9, length)
 
-        self.test_data = self.slice_data(train_file_data, 0.9, 1, length)
-        self.train_data = train_file_data[0: round(0.9 * length)]
+        self.test_data = self.slice_data(train_file_data, length-200, length)
+        self.train_data = train_file_data[0: length-200]
         np.random.shuffle(self.train_data)
         length = len(self.train_data)
-        self.val_data = self.slice_data(self.train_data, 0.9, 1, length)
-        self.train_data = self.slice_data(self.train_data, 0, 0.9, len(self.train_data))
+        self.val_data = self.slice_data(self.train_data, length-235, length)
+        self.train_data = self.slice_data(self.train_data, 0,length-235)
 
         pass
 
-    def slice_data(self, data, start, stop, length):
-        data = data[round(start*length): round(stop*length)]
+    def slice_data(self, data, start, stop):
+        data = data[start: stop]
         features = data[:, 0:27].astype(np.float32)
         images_urls = data[:, 27:28]
         return features, images_urls
