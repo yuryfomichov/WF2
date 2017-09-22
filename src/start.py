@@ -6,6 +6,7 @@ from train import Train
 from models.combinedmodel import CombinedModel
 from models.featuresmodel import FeaturesModel
 from models.imagemodel import ImageModel
+from models.imagemodel import PosterModel
 from torch.autograd import Variable
 
 
@@ -48,6 +49,19 @@ def getNetwork3(create_new=True):
     return network
 
 
+def getNetwork4(create_new=True):
+    loader = DatasetLoader({
+        'batch_size': 294,
+        'num_workers': 8 if torch.cuda.is_available() else 0
+    })
+    network = Train(PosterModel,
+                    loader,
+                    model_filename="model4.pt",
+                    create_new=create_new,
+                    print_every=1)
+    return network
+
+
 def trainModel(network):
     loss_fn = nn.CrossEntropyLoss().type(network.data_type)
     network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-2, weight_decay=1e-3), num_epochs=8)
@@ -59,9 +73,11 @@ def trainModel(network):
 
 
 def start():
-    network1 = trainModel(getNetwork1())
-    network2 = trainModel(getNetwork2())
-    network3 = trainModel(getNetwork3())
+    # network1 = trainModel(getNetwork1())
+    # network2 = trainModel(getNetwork2())
+    # network3 = trainModel(getNetwork3())
+    network4 = trainModel(getNetwork4())
+
 
 def check_accuracy(loader, model1, model2, model3):
     num_correct = 0
@@ -70,17 +86,20 @@ def check_accuracy(loader, model1, model2, model3):
     model2.eval()
     model3.eval()
     for x, x1, y in loader:
-        x_var = Variable(x.type(torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor), volatile=True)
-        x1_var = Variable(x1.type(torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor), volatile=True)
+        x_var = Variable(x.type(torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor),
+                         volatile=True)
+        x1_var = Variable(x1.type(torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor),
+                          volatile=True)
         scores1 = model1(x_var, x1_var)
         scores2 = model2(x_var, x1_var)
         scores3 = model3(x_var, x1_var)
+        scores4 = model3(x_var, x1_var)
         probs1 = nn.Softmax()(scores1)
         probs2 = nn.Softmax()(scores2)
         probs3 = nn.Softmax()(scores3)
-        probs = probs1 + probs2 + probs3;
+        probs4 = nn.Softmax()(scores4)
+        probs = probs1 + probs2 + probs3 + probs4;
         _, preds = probs.data.cpu().max(1)
-
         num_correct += (preds == y).sum()
         num_samples += preds.size(0)
 
@@ -93,6 +112,7 @@ def checkAccAllModels():
     network1 = getNetwork1(False)
     network2 = getNetwork2(False)
     network3 = getNetwork3(False)
+    network4 = getNetwork4(False)
     loader = DatasetLoader({
         'batch_size': 200,
         'num_workers': 8 if torch.cuda.is_available() else 0
@@ -101,8 +121,10 @@ def checkAccAllModels():
     network1.check_test_accuracy()
     network2.check_test_accuracy()
     network3.check_test_accuracy()
-    check_accuracy(loader.get_test_loader(),network1.model, network2.model, network3.model)
+    network4.check_test_accuracy()
+    print('Average Probability Accurancy')
+    check_accuracy(loader.get_test_loader(), network1.model, network2.model, network3.model)
+
 
 start()
 checkAccAllModels()
-
