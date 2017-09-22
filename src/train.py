@@ -81,8 +81,9 @@ class Train(object):
             print('Backward time t={:0.1f}s'.format(backward_time))
 
             acc = self.check_val_accuracy()
-            self.save_model();
-            self.check_train_accuracy()
+            if (acc >= self.best_acc):
+                self.save_model();
+        self.check_train_accuracy()
         self.check_test_accuracy()
 
     def check_train_accuracy(self):
