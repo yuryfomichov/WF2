@@ -39,6 +39,15 @@ class PosterModel(nn.Module):
             nn.Linear(1024, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(True),
+            nn.Linear(1024, 1024),
+            nn.BatchNorm1d(1024),
+            nn.ReLU(True),
+            nn.Linear(1024, 1024),
+            nn.BatchNorm1d(1024),
+            nn.ReLU(True),
+            nn.Linear(1024, 1024),
+            nn.BatchNorm1d(1024),
+            nn.ReLU(True),
             nn.Linear(1024, num_classes),
         )
 
