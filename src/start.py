@@ -103,11 +103,11 @@ def probabilityPrediction(x, x1, models):
     for model in models:
         scores = model(x, x1)
         probs = nn.Softmax()(scores)
-        _, probs = probs.data.cpu().max(1)
         if (result is None):
             result = probs
         else:
             result += probs
+    _, result = result.data.cpu().max(1)
     return result
 
 def majority(x, x1, models, value):
@@ -142,14 +142,14 @@ def checkAccAllModels():
     network3 = getNetwork3(False)
     network4 = getNetwork4(False)
     loader = DatasetLoader({
-        'batch_size': 200,
+        'batch_size': 10,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     print('---------------start-----------------')
-    network1.check_test_accuracy()
-    network2.check_test_accuracy()
-    network3.check_test_accuracy()
-    network4.check_test_accuracy()
+    #network1.check_test_accuracy()
+    #network2.check_test_accuracy()
+    #network3.check_test_accuracy()
+    #network4.check_test_accuracy()
     print('Average Probability Accurancy')
     check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network3.model, network4.model],
                    probabilityPrediction)
