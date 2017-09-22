@@ -20,6 +20,9 @@ class FeaturesModel(nn.Module):
             nn.Linear(2048, 2048),
             nn.BatchNorm1d(2048),
             nn.ReLU(True),
+            nn.Linear(2048, 2048),
+            nn.BatchNorm1d(2048),
+            nn.ReLU(True),
             nn.Linear(2048, num_classes),
         )
 
