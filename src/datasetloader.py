@@ -72,10 +72,10 @@ class DatasetLoader(object):
         # self.train_data = self.slice_data(self.train_data, 0, 0.9, length)
 
         self.test_data = self.slice_data(train_file_data, 0.9, 1, length)
+        self.train_data = train_file_data[0: round(0.9 * length)]
         np.random.shuffle(self.train_data)
-        self.val_data = self.slice_data(train_file_data, 0.8, 1, length)
-        self.train_data = train_file_data[0: round(0.8 * length)]
-        self.train_data = self.slice_data(self.train_data, 0, 1, len(self.train_data))
+        self.val_data = self.slice_data(self.train_data, 0.8, 1, length)
+        self.train_data = self.slice_data(self.train_data, 0, 0.8, len(self.train_data))
 
         pass
 

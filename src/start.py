@@ -36,7 +36,7 @@ def getNetwork2():
 
 def getNetwork3():
     loader = DatasetLoader({
-        'batch_size': 409,
+        'batch_size': 436,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     network = Train(ImageModel,
