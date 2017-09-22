@@ -6,7 +6,7 @@ from train import Train
 from models.combinedmodel import CombinedModel
 from models.featuresmodel import FeaturesModel
 from models.imagemodel import ImageModel
-from models.imagemodel import PosterModel
+from models.postermodel import PosterModel
 from torch.autograd import Variable
 
 
