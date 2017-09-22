@@ -125,8 +125,8 @@ def majority(x, x1, model1, model2, model3, model4, value):
     _, preds3 = scores3.data.cpu().max(1)
     _, preds4 = scores4.data.cpu().max(1)
     preds = preds1 + preds2 + preds3 + preds4
-    preds = preds[preds < value] = 0
-    preds = preds[preds > 0] = 1
+    preds[preds < value] = 0
+    preds[preds > 0] = 1
     return preds
 
 
