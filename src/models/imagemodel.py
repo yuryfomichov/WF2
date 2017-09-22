@@ -33,10 +33,13 @@ class ImageModel(nn.Module):
         )
 
         self.secondNet = nn.Sequential(
-            nn.Linear(25, 2048),
-            nn.BatchNorm1d(2048),
+            nn.Linear(25, 1024),
+            nn.BatchNorm1d(1024),
             nn.ReLU(True),
-            nn.Linear(2048, 256),
+            nn.Linear(1024, 1024),
+            nn.BatchNorm1d(1024),
+            nn.ReLU(True),
+            nn.Linear(1024, 256),
         )
 
         self.combineNet = nn.Sequential(
