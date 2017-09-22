@@ -96,6 +96,9 @@ def checkAccAllModels():
         'batch_size': 10,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
+    network1.check_train_accuracy()
+    network2.check_train_accuracy()
+    network3.check_train_accuracy()
     check_accuracy(loader.get_test_loader(),network1.model, network2.model, network3.model)
 checkAccAllModels()
 
