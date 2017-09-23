@@ -40,12 +40,9 @@ class Train(object):
             print('')
             print('--------------------------------------------------------------------------------------------------')
             print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
-
             tic = time.time()
             self.model.train()
             for t, (x, x1, y) in enumerate(self.loader.get_train_loader()):
-                read_data_time += (time.time() - read_data_tic);
-
                 if torch.cuda.is_available():
                     x, x1, y = x.cuda(async=True), x1.cuda(async=True), y.cuda(async=True)
 
