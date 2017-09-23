@@ -74,6 +74,12 @@ class Train(object):
                 optimizer.step()
                 backward_time += (time.time() - backward_time_tic);
                 read_data_tic = time.time()
+                
+                acc = self.check_val_accuracy()
+                if (acc >= self.best_acc):
+                    self.best_acc = acc;
+                    self.save_model();
+                
             print('Epoch done in t={:0.1f}s'.format(time.time() - tic))
             print('Reading data time t={:0.1f}s'.format(read_data_time))
             print('Convert to CUDA t={:0.1f}s'.format(convert_to_CUDA_time))
@@ -81,9 +87,6 @@ class Train(object):
             print('Backward time t={:0.1f}s'.format(backward_time))
 
             acc = self.check_val_accuracy()
-            if (acc >= self.best_acc):
-                self.best_acc = acc;
-                self.save_model();
         self.check_train_accuracy()
         self.check_test_accuracy()
 
