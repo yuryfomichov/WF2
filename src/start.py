@@ -72,7 +72,7 @@ def trainModel(network):
 
 def start():
     #network1 = trainModel(getNetwork1())
-    #network2 = trainModel(getNetwork2())
+    network2 = trainModel(getNetwork2())
     #network3 = trainModel(getNetwork3())
     #network4 = trainModel(getNetwork4())
     pass
@@ -153,7 +153,7 @@ def checkAccAllModels():
     network3.check_test_accuracy()
     network4.check_test_accuracy()
     print('Average Probability Accurancy')
-    check_accuracy(loader.get_test_loader(), [network2.model,network3.model, network4.model],
+    check_accuracy(loader.get_test_loader(), [network1.model, network2.model,network3.model, network4.model],
                    probabilityPrediction)
     print('Majority1')
     check_accuracy(loader.get_test_loader(), [network1.model, network2.model, network3.model, network4.model],
