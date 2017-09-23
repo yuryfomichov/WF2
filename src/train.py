@@ -42,51 +42,33 @@ class Train(object):
             print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
 
             tic = time.time()
-            read_data_tic = time.time()
-            read_data_time = 0;
-            forward_time = 0;
-            convert_to_CUDA_time = 0;
-            backward_time = 0;
             self.model.train()
             for t, (x, x1, y) in enumerate(self.loader.get_train_loader()):
                 read_data_time += (time.time() - read_data_tic);
 
                 if torch.cuda.is_available():
-                    convert_to_CUDA_tic = time.time()
                     x, x1, y = x.cuda(async=True), x1.cuda(async=True), y.cuda(async=True)
-                    convert_to_CUDA_time += (time.time() - convert_to_CUDA_tic);
 
                 x_var = Variable(x, requires_grad=False)
                 x1_var = Variable(x1, requires_grad=False)
                 y_var = Variable(y.long())
-
-                forward_time_tic = time.time()
                 scores = self.model(x_var, x1_var)
                 loss = loss_fn(scores, y_var)
-                forward_time += (time.time() - forward_time_tic);
 
                 if (t + 1) % self.print_every == 0:
                     print('t = %d, loss = %.4f' % (t + 1, loss.data[0]))
-
-                backward_time_tic = time.time()
+                    
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
-                backward_time += (time.time() - backward_time_tic);
-                read_data_tic = time.time()
                 
                 acc = self.check_val_accuracy()
                 if (acc >= self.best_acc):
-                    self.best_acc = acc;
-                    self.save_model();
+                    print("!!! best model !!!")
+                    self.best_acc = acc
+                    self.save_model()
                 
             print('Epoch done in t={:0.1f}s'.format(time.time() - tic))
-            print('Reading data time t={:0.1f}s'.format(read_data_time))
-            print('Convert to CUDA t={:0.1f}s'.format(convert_to_CUDA_time))
-            print('Forward time t={:0.1f}s'.format(forward_time))
-            print('Backward time t={:0.1f}s'.format(backward_time))
-
-            acc = self.check_val_accuracy()
         self.check_train_accuracy()
         self.check_test_accuracy()
 
