@@ -36,6 +36,8 @@ class Train(object):
         self.model.load_state_dict(torch.load(self.model_filename))
 
     def train(self, loss_fn, optimizer, num_epochs=1):
+        if self.best_acc>0:
+            self.load_model()
         for epoch in range(num_epochs):
             print('')
             print('--------------------------------------------------------------------------------------------------')
