@@ -76,7 +76,7 @@ def start():
     #network1 = trainModel(getNetwork1(), 1e-3, 8, 3)
     #network2 = trainModel(getNetwork2(), 5e-4, 8, 3)
     #network3 = trainModel(getNetwork3(), 1e-3, 8, 3)
-    network4 = trainModel(getNetwork4(), 1e-4, 8, 3)
+    network4 = trainModel(getNetwork4(), 1e-3, 8, 3)
     pass
 
 
