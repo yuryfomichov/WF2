@@ -62,19 +62,21 @@ def getNetwork4(create_new=True):
     return network
 
 
-def trainModel(network):
+def trainModel(network, start_lr):
     loss_fn = nn.CrossEntropyLoss().type(network.data_type)
-    network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-3, weight_decay=1e-3), num_epochs=8)
-    network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-4, weight_decay=1e-3), num_epochs=8)
-    network.train(loss_fn, optim.Adam(network.model.parameters(), lr=1e-5, weight_decay=1e-3), num_epochs=8)
+    for i in range(4):
+        decay = 10**i
+        lr = start_lr / decay
+        print(lr)
+        network.train(loss_fn, optim.Adam(network.model.parameters(), lr=lr, weight_decay=1e-3), num_epochs=8)
     return network
 
 
 def start():
-    network1 = trainModel(getNetwork1())
-    network2 = trainModel(getNetwork2())
-    network3 = trainModel(getNetwork3())
-    network4 = trainModel(getNetwork4())
+    network1 = trainModel(getNetwork1(), 1e-3)
+    network2 = trainModel(getNetwork2(), 1e-3)
+    network3 = trainModel(getNetwork3(), 1e-3)
+    network4 = trainModel(getNetwork4(), 1e-3)
     pass
 
 
