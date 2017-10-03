@@ -12,10 +12,11 @@ from models.postermodel import PosterModel
 from torch.autograd import Variable
 
 
-def getNetwork(model, file_name, create_new=True, verbose=True):
+def getNetwork(model, file_name, create_new=True, verbose=True, shuffle=True):
     loader = DatasetLoader({
         'batch_size': 300,
-        'num_workers': 10 if torch.cuda.is_available() else 0
+        'num_workers': 10 if torch.cuda.is_available() else 0,
+        'shuffle': shuffle
     })
     network = Train(model,
                     loader,
@@ -51,7 +52,7 @@ def start():
 
 def gridSearch():
     lerning_rates = 10 ** np.random.uniform(-5, -1, 6)
-    weights_decay = 10 ** np.random.uniform(-5, -2, 3)
+    weights_decay = 10 ** np.random.uniform(-5, -2, 4)
 
     networks = [
         CombinedModel,
@@ -64,7 +65,7 @@ def gridSearch():
         best_model = None
         for lr in lerning_rates:
             for ws in weights_decay:
-                model = trainModel(getNetwork(network, "model-gs.pt", verbose=False), lr, 2, 1, ws)
+                model = trainModel(getNetwork(network, "model-gs.pt", verbose=False, shuffle=False), lr, 2, 1, ws)
                 acc = model.check_val_accuracy()
                 print('lr %e ws %e val accuracy: %f' % (lr, ws, acc))
                 if (best_acc < acc):

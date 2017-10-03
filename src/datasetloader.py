@@ -13,6 +13,7 @@ class DatasetLoader(object):
         self.image_folder = 'posters'
         self.batch_size = params.get("batch_size", 200)
         self.num_workers = params.get("num_workers", 32)
+        self.shuffle = params.get("shuffle", True)
         self._load_data()
 
     def _get_loader(self,data, drop_last = False, is_train = True):
@@ -73,7 +74,8 @@ class DatasetLoader(object):
 
         self.test_data = self.slice_data(train_file_data, 0, 300)
         self.train_data = train_file_data[300: length]
-        np.random.shuffle(self.train_data)
+        if self.shuffle:
+            np.random.shuffle(self.train_data)
         length = len(self.train_data)
         self.val_data = self.slice_data(self.train_data, length-335, length)
         self.train_data = self.slice_data(self.train_data, 0,length-335)
