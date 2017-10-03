@@ -38,10 +38,10 @@ def trainModel(network, start_lr, epochs, decay_steps, weight_decay=1e-3):
 
 
 def start():
-    #network1 = trainModel(getNetwork(CombinedModel, "model1-1.pt"), 1.092705e-02, 6, 3, 9.722207e-04)
+    network1 = trainModel(getNetwork(CombinedModel, "model1-1.pt"), 1.092705e-02, 6, 3, 9.722207e-04)
     #network2 = trainModel(getNetwork(CombinedModel, "model1-2.pt"), 1.092705e-02, 6, 4, 9.722207e-04)
     #network3 = trainModel(getNetwork(FeaturesModel, "model2-1.pt"), 2.996677e-02, 6, 3, 1.523906e-04)
-    #network4 = trainModel(getNetwork(FeaturesModel, "model2-2.pt"), 2.996677e-02, 6, 3, 1.523906e-04)
+    network4 = trainModel(getNetwork(FeaturesModel, "model2-2.pt"), 2.996677e-02, 6, 3, 1.523906e-04)
     #network5 = trainModel(getNetwork(FeaturesModel, "model2-3.pt"), 2.996677e-02, 6, 3, 1.523906e-04)
     #network6 = trainModel(getNetwork(ImageModel, "model3-1.pt"), 2.996677e-02, 6, 3, 1.523906e-04)
     #network7 = trainModel(getNetwork(ImageModel, "model3-2.pt"), 2.996677e-02, 6, 3, 1.523906e-04)
