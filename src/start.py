@@ -51,8 +51,7 @@ def start():
 
 
 def gridSearch():
-    lerning_rates = 10 ** np.random.uniform(-5, -1, 6)
-    weights_decay = 10 ** np.random.uniform(-5, -2, 4)
+    lerning_rates = 10 ** np.random.uniform(-4, -1, 12)
 
     networks = [
         CombinedModel,
@@ -64,15 +63,15 @@ def gridSearch():
         best_acc = 0
         best_model = None
         for lr in lerning_rates:
-            for ws in weights_decay:
-                model = trainModel(getNetwork(network, "model-gs.pt", verbose=False, shuffle=False), lr, 2, 1, ws)
-                acc = model.check_val_accuracy()
-                print('lr %e ws %e val accuracy: %f' % (lr, ws, acc))
-                if (best_acc < acc):
-                    best_acc = acc
-                    best_model = (lr, ws, acc)
+            model = trainModel(getNetwork(network, "model-gs.pt", verbose=False, shuffle=False), lr, 2, 1,
+                                   1.523906e-04)
+            acc = model.check_val_accuracy()
+            print('lr %e ws %e val accuracy: %f' % (lr, acc))
+            if (best_acc < acc):
+                best_acc = acc
+                best_model = (lr, acc)
         print('----- Best Results -----')
-        print('lr %e ws %e val accuracy: %f' % (best_model[0], best_model[1], best_model[2]))
+        print('lr %e val accuracy: %f' % (best_model[0], best_model[1]))
         print(' ')
         print(' ')
 
@@ -164,6 +163,6 @@ def checkAccAllModels():
     check_accuracy(loader.get_test_loader(), models, majorityPrediction)
 
 
-start()
-checkAccAllModels()
-#gridSearch()
+#start()
+#checkAccAllModels()
+gridSearch()
