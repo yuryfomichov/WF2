@@ -38,15 +38,15 @@ def trainModel(network, start_lr, epochs, decay_steps, weight_decay=1e-3):
 
 
 def start():
-    network1 = trainModel(getNetwork(CombinedModel, "model1-1.pt"), 3.140937e-03, 8, 3, 9.722207e-04)
-    network2 = trainModel(getNetwork(CombinedModel, "model1-2.pt"), 3.140937e-03, 8, 3, 9.722207e-04)
-    network3 = trainModel(getNetwork(FeaturesModel, "model2-1.pt"), 2.278409e-02, 8, 3, 1.523906e-04)
-    network4 = trainModel(getNetwork(FeaturesModel, "model2-2.pt"), 2.278409e-02, 8, 3, 1.523906e-04)
-    network5 = trainModel(getNetwork(FeaturesModel, "model2-3.pt"), 2.278409e-02, 8, 3, 1.523906e-04)
-    network6 = trainModel(getNetwork(ImageModel, "model3-1.pt"), 2.278409e-02, 8, 3, 1.523906e-04)
-    network7 = trainModel(getNetwork(ImageModel, "model3-2.pt"), 2.278409e-02, 8, 3, 1.523906e-04)
-    network8 = trainModel(getNetwork(PosterModel, "model4-1.pt"), 2.278409e-02, 8, 3, 1.523906e-04)
-    network9 = trainModel(getNetwork(PosterModel, "model4-2.pt"), 2.278409e-02, 8, 3, 1.523906e-04)
+    network1 = trainModel(getNetwork(CombinedModel, "model1-1.pt"), 1.092705e-02, 8, 3, 9.722207e-04)
+    network2 = trainModel(getNetwork(CombinedModel, "model1-2.pt"), 1.092705e-02, 8, 3, 9.722207e-04)
+    network3 = trainModel(getNetwork(FeaturesModel, "model2-1.pt"), 2.996677e-02, 8, 3, 1.523906e-04)
+    network4 = trainModel(getNetwork(FeaturesModel, "model2-2.pt"), 2.996677e-02, 8, 3, 1.523906e-04)
+    network5 = trainModel(getNetwork(FeaturesModel, "model2-3.pt"), 2.996677e-02, 8, 3, 1.523906e-04)
+    network6 = trainModel(getNetwork(ImageModel, "model3-1.pt"), 2.996677e-02, 8, 3, 1.523906e-04)
+    network7 = trainModel(getNetwork(ImageModel, "model3-2.pt"), 2.996677e-02, 8, 3, 1.523906e-04)
+    network8 = trainModel(getNetwork(PosterModel, "model4-1.pt"), 5.993566e-04, 8, 3, 1.523906e-04)
+    network9 = trainModel(getNetwork(PosterModel, "model4-2.pt"), 5.993566e-04, 8, 3, 1.523906e-04)
     pass
 
 
@@ -163,6 +163,6 @@ def checkAccAllModels():
     check_accuracy(loader.get_test_loader(), models, majorityPrediction)
 
 
-#start()
-#checkAccAllModels()
-gridSearch()
+start()
+checkAccAllModels()
+#gridSearch()
