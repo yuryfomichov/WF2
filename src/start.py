@@ -66,7 +66,7 @@ def gridSearch():
             model = trainModel(getNetwork(network, "model-gs.pt", verbose=False, shuffle=False), lr, 2, 1,
                                    1.523906e-04)
             acc = model.check_val_accuracy()
-            print('lr %e ws %e val accuracy: %f' % (lr, acc))
+            print('lr %e val accuracy: %f' % (lr, acc))
             if (best_acc < acc):
                 best_acc = acc
                 best_model = (lr, acc)
