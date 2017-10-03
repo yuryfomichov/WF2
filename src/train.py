@@ -4,7 +4,7 @@ from torch.autograd import Variable
 
 
 class Train(object):
-    def __init__(self, Model, loader, model_filename='model.pt', create_new=False, print_every=10, verbose = True):
+    def __init__(self, Model, loader, model_filename='model.pt', create_new=False, print_every=10, verbose=True):
         self.data_type = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
         self.model_filename = model_filename
         self.create_new = create_new
@@ -12,18 +12,22 @@ class Train(object):
         self.loader = loader
         self.Model = Model
         self.best_acc = 0
+        self.verbose = verbose
         self.init()
 
     def init(self):
         self.init_model()
         if self.create_new:
-            print('New model was created')
+            if self.verbose:
+                print('New model was created')
         else:
             try:
                 self.load_model()
-                print('Model was loaded from file')
+                if self.verbose:
+                    print('Model was loaded from file')
             except:
-                print('No model had been found. New model was created')
+                if self.verbose:
+                    print('No model had been found. New model was created')
 
     def init_model(self):
         self.model = self.Model()
@@ -39,9 +43,11 @@ class Train(object):
         if self.best_acc>0:
             self.load_model()
         for epoch in range(num_epochs):
-            print('')
-            print('--------------------------------------------------------------------------------------------------')
-            print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
+            if self.verbose:
+                print('')
+                print('--------------------------------------------------------------------------------------------------')
+                print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
+
             tic = time.time()
             self.model.train()
             for t, (x, x1, y) in enumerate(self.loader.get_train_loader()):
@@ -54,7 +60,7 @@ class Train(object):
                 scores = self.model(x_var, x1_var)
                 loss = loss_fn(scores, y_var)
 
-                if (t + 1) % self.print_every == 0:
+                if self.verbose and (t + 1) % self.print_every == 0:
                     print('t = %d, loss = %.4f' % (t + 1, loss.data[0]))
                     
                 optimizer.zero_grad()
@@ -63,23 +69,28 @@ class Train(object):
                 
             acc = self.check_val_accuracy()
             if (acc >= self.best_acc):
-                print("!!! best model !!!")
+                if self.verbose:
+                    print("!!! best model !!!")
                 self.best_acc = acc
                 self.save_model()
-            print('Epoch done in t={:0.1f}s'.format(time.time() - tic))
+            if self.verbose:
+                print('Epoch done in t={:0.1f}s'.format(time.time() - tic))
         self.check_train_accuracy()
         self.check_test_accuracy()
 
     def check_train_accuracy(self):
-        print('Checking accuracy on TRAIN set')
+        if self.verbose:
+            print('Checking accuracy on TRAIN set')
         return self.check_accuracy(self.loader.get_train_loader(False))
 
     def check_val_accuracy(self):
-        print('Checking accuracy on VALIDATION set')
+        if self.verbose:
+            print('Checking accuracy on VALIDATION set')
         return self.check_accuracy(self.loader.get_val_loader())
 
     def check_test_accuracy(self):
-        print('Checking accuracy on TEST set')
+        if self.verbose:
+            print('Checking accuracy on TEST set')
         return self.check_accuracy(self.loader.get_test_loader())
 
     def check_accuracy(self, loader, stop_on=-1):
