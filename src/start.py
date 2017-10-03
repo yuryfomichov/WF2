@@ -50,8 +50,8 @@ def start():
 
 
 def gridSearch():
-    lerning_rates = 10 ** np.random.uniform(-5, -2, 5)
-    weights_decay = 10 ** np.random.uniform(-5, -2, 5)
+    lerning_rates = 10 ** np.random.uniform(-5, -2, 4)
+    weights_decay = 10 ** np.random.uniform(-5, -2, 4)
 
     networks = [
         CombinedModel,
