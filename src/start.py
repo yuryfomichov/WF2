@@ -149,5 +149,5 @@ def checkAccAllModels():
     check_accuracy(loader.get_test_loader(), models, majorityPrediction)
 
 
-# start()
+start()
 checkAccAllModels()
