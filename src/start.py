@@ -25,13 +25,14 @@ def getNetwork(model, file_name, create_new=True):
     return network
 
 
-def trainModel(network, start_lr, epochs, decay_steps, weight_decay=1e-3):
+def trainModel(network, start_lr, epochs, decay_steps, weight_decay=1e-3, verbose=True):
     loss_fn = nn.CrossEntropyLoss().type(network.data_type)
     for i in range(decay_steps):
         decay = 10 ** i
         lr = start_lr / decay
         print(lr)
-        network.train(loss_fn, optim.Adam(network.model.parameters(), lr=lr, weight_decay=weight_decay), num_epochs=epochs)
+        network.train(loss_fn, optim.Adam(network.model.parameters(), lr=lr, weight_decay=weight_decay),
+                      num_epochs=epochs, verbose=verbose)
     return network
 
 
@@ -46,6 +47,7 @@ def start():
     network8 = trainModel(getNetwork(PosterModel, "model4-1.pt"), 1e-3, 8, 3)
     network9 = trainModel(getNetwork(PosterModel, "model4-2.pt"), 1e-3, 8, 3)
     pass
+
 
 def gridSearch():
     lerning_rates = 10 ** np.random.uniform(-5, -2, 5)
@@ -62,7 +64,7 @@ def gridSearch():
         best_model = None
         for lr in lerning_rates:
             for ws in weights_decay:
-                model = trainModel(getNetwork(network, "model-gs.pt"), lr, 2, 1, ws)
+                model = trainModel(getNetwork(network, "model-gs.pt"), lr, 2, 1, ws, verbose=False)
                 acc = model.check_val_accuracy()
                 print('lr %e ws %e val accuracy: %f' % (lr, ws, acc))
                 if (best_acc < acc):
@@ -70,7 +72,6 @@ def gridSearch():
                     best_model = (lr, ws, acc)
 
         print('lr %e ws %e val accuracy: %f' % (best_model[0], best_model[1], best_model[2]))
-
 
 
 def check_accuracy(loader, models, predictionFunction):
@@ -160,6 +161,6 @@ def checkAccAllModels():
     check_accuracy(loader.get_test_loader(), models, majorityPrediction)
 
 
-#start()
-#checkAccAllModels()
+# start()
+# checkAccAllModels()
 gridSearch()
