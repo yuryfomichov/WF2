@@ -14,8 +14,8 @@ from torch.autograd import Variable
 
 def getNetwork(model, file_name, create_new=True, verbose=True, shuffle=True):
     loader = DatasetLoader({
-        'batch_size': 300,
-        'num_workers': 10 if torch.cuda.is_available() else 0,
+        'batch_size': 400,
+        'num_workers': 8 if torch.cuda.is_available() else 0,
         'shuffle': shuffle
     })
     network = Train(model,
@@ -145,7 +145,7 @@ def checkAccAllModels():
               network9.model]
 
     loader = DatasetLoader({
-        'batch_size': 300,
+        'batch_size': 235,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     print('---------------start-----------------')
