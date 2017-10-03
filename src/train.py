@@ -61,12 +61,11 @@ class Train(object):
                 loss.backward()
                 optimizer.step()
                 
-                acc = self.check_val_accuracy()
-                if (acc >= self.best_acc):
-                    print("!!! best model !!!")
-                    self.best_acc = acc
-                    self.save_model()
-                
+            acc = self.check_val_accuracy()
+            if (acc >= self.best_acc):
+                print("!!! best model !!!")
+                self.best_acc = acc
+                self.save_model()
             print('Epoch done in t={:0.1f}s'.format(time.time() - tic))
         self.check_train_accuracy()
         self.check_test_accuracy()
