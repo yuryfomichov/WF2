@@ -1,6 +1,8 @@
 import torch as torch
 import torch.nn as nn
 import torch.optim as optim
+import math
+import numpy as np
 from datasetloader import DatasetLoader
 from train import Train
 from models.combinedmodel import CombinedModel
@@ -23,31 +25,52 @@ def getNetwork(model, file_name, create_new=True):
     return network
 
 
-def trainModel(network, start_lr, epochs, decay_steps):
+def trainModel(network, start_lr, epochs, decay_steps, weight_decay=1e-3):
     loss_fn = nn.CrossEntropyLoss().type(network.data_type)
     for i in range(decay_steps):
         decay = 10 ** i
         lr = start_lr / decay
         print(lr)
-        network.train(loss_fn, optim.Adam(network.model.parameters(), lr=lr, weight_decay=1e-3), num_epochs=epochs)
+        network.train(loss_fn, optim.Adam(network.model.parameters(), lr=lr, weight_decay=weight_decay), num_epochs=epochs)
     return network
 
 
 def start():
     network1 = trainModel(getNetwork(CombinedModel, "model1-1.pt"), 1e-3, 8, 3)
     network2 = trainModel(getNetwork(CombinedModel, "model1-2.pt"), 1e-3, 8, 3)
-    network3 = trainModel(getNetwork(CombinedModel, "model1-3.pt"), 1e-3, 8, 3)
-    network4 = trainModel(getNetwork(FeaturesModel, "model2-1.pt"), 5e-4, 8, 3)
-    network5 = trainModel(getNetwork(FeaturesModel, "model2-2.pt"), 5e-4, 8, 3)
-    network6 = trainModel(getNetwork(FeaturesModel, "model2-3.pt"), 5e-4, 8, 3)
-    network7 = trainModel(getNetwork(FeaturesModel, "model2-4.pt"), 5e-4, 8, 3)
-    network8 = trainModel(getNetwork(ImageModel, "model3-1.pt"), 1e-3, 8, 3)
-    network9 = trainModel(getNetwork(ImageModel, "model3-2.pt"), 1e-3, 8, 3)
-    network10 = trainModel(getNetwork(ImageModel, "model3-3.pt"), 1e-3, 8, 3)
-    network11 = trainModel(getNetwork(PosterModel, "model4-1.pt"), 1e-3, 8, 3)
-    network12 = trainModel(getNetwork(PosterModel, "model4-2.pt"), 1e-3, 8, 3)
-    network13 = trainModel(getNetwork(PosterModel, "model4-3.pt"), 1e-3, 8, 3)
+    network3 = trainModel(getNetwork(FeaturesModel, "model2-1.pt"), 5e-4, 8, 3)
+    network4 = trainModel(getNetwork(FeaturesModel, "model2-2.pt"), 5e-4, 8, 3)
+    network5 = trainModel(getNetwork(FeaturesModel, "model2-3.pt"), 5e-4, 8, 3)
+    network6 = trainModel(getNetwork(ImageModel, "model3-1.pt"), 1e-3, 8, 3)
+    network7 = trainModel(getNetwork(ImageModel, "model3-2.pt"), 1e-3, 8, 3)
+    network8 = trainModel(getNetwork(PosterModel, "model4-1.pt"), 1e-3, 8, 3)
+    network9 = trainModel(getNetwork(PosterModel, "model4-2.pt"), 1e-3, 8, 3)
     pass
+
+def gridSearch():
+    lerning_rates = 10 ** np.random.uniform(-5, -2, 5)
+    weights_decay = 10 ** np.random.uniform(-5, -2, 5)
+
+    networks = [
+        getNetwork(CombinedModel, "model1-gs.pt"),
+        getNetwork(FeaturesModel, "model2-gs.pt"),
+        getNetwork(ImageModel, "model3-gs.pt"),
+        getNetwork(PosterModel, "model4-gs.pt")];
+
+    for network in networks:
+        best_acc = 0
+        best_model = None
+        for lr in lerning_rates:
+            for ws in weights_decay:
+                model = trainModel(network, lr, 2, 1, ws)
+                acc = model.check_val_accuracy()
+                print('lr %e ws %e val accuracy: %f' % (lr, ws, acc))
+                if (best_acc < acc):
+                    best_acc = acc
+                    best_model = (lr, ws, acc)
+
+        print('lr %e ws %e val accuracy: %f' % (best_model[0], best_model[1], best_model[2]))
+
 
 
 def check_accuracy(loader, models, predictionFunction):
@@ -91,7 +114,7 @@ def majorityPrediction(x, x1, models):
             result = preds
         else:
             result += preds
-    result[result < round(len(models) / 2)] = 0
+    result[result < math.ceil(len(models) / 2)] = 0
     result[result > 0] = 1
     return result
 
@@ -99,17 +122,13 @@ def majorityPrediction(x, x1, models):
 def checkAccAllModels():
     network1 = getNetwork(CombinedModel, "model1-1.pt", False)
     network2 = getNetwork(CombinedModel, "model1-2.pt", False)
-    network3 = getNetwork(CombinedModel, "model1-3.pt", False)
-    network4 = getNetwork(FeaturesModel, "model2-1.pt", False)
-    network5 = getNetwork(FeaturesModel, "model2-2.pt", False)
-    network6 = getNetwork(FeaturesModel, "model2-3.pt", False)
-    network7 = getNetwork(FeaturesModel, "model2-4.pt", False)
-    network8 = getNetwork(ImageModel, "model3-1.pt", False)
-    network9 = getNetwork(ImageModel, "model3-2.pt", False)
-    network10 = getNetwork(ImageModel, "model3-3.pt", False)
-    network11 = getNetwork(PosterModel, "model4-1.pt", False)
-    network12 = getNetwork(PosterModel, "model4-2.pt", False)
-    network13 = getNetwork(PosterModel, "model4-3.pt", False)
+    network3 = getNetwork(FeaturesModel, "model2-1.pt", False)
+    network4 = getNetwork(FeaturesModel, "model2-2.pt", False)
+    network5 = getNetwork(FeaturesModel, "model2-3.pt", False)
+    network6 = getNetwork(ImageModel, "model3-1.pt", False)
+    network7 = getNetwork(ImageModel, "model3-2.pt", False)
+    network8 = getNetwork(PosterModel, "model4-1.pt", False)
+    network9 = getNetwork(PosterModel, "model4-2.pt", False)
 
     models = [network1.model,
               network2.model,
@@ -119,14 +138,10 @@ def checkAccAllModels():
               network6.model,
               network7.model,
               network8.model,
-              network9.model,
-              network10.model,
-              network11.model,
-              network12.model,
-              network13.model]
+              network9.model]
 
     loader = DatasetLoader({
-        'batch_size': 335,
+        'batch_size': 200,
         'num_workers': 8 if torch.cuda.is_available() else 0
     })
     print('---------------start-----------------')
@@ -139,15 +154,12 @@ def checkAccAllModels():
     network7.check_test_accuracy()
     network8.check_test_accuracy()
     network9.check_test_accuracy()
-    network10.check_test_accuracy()
-    network11.check_test_accuracy()
-    network12.check_test_accuracy()
-    network13.check_test_accuracy()
     print('Average Probability Accurancy')
     check_accuracy(loader.get_test_loader(), models, probabilityPrediction)
     print('Majority Prediction Accurancy')
     check_accuracy(loader.get_test_loader(), models, majorityPrediction)
 
 
-start()
-checkAccAllModels()
+#start()
+#checkAccAllModels()
+gridSearch()
