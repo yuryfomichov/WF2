@@ -52,17 +52,17 @@ def gridSearch():
     weights_decay = 10 ** np.random.uniform(-5, -2, 5)
 
     networks = [
-        getNetwork(CombinedModel, "model1-gs.pt"),
-        getNetwork(FeaturesModel, "model2-gs.pt"),
-        getNetwork(ImageModel, "model3-gs.pt"),
-        getNetwork(PosterModel, "model4-gs.pt")];
+        CombinedModel,
+        FeaturesModel,
+        ImageModel,
+        PosterModel];
 
     for network in networks:
         best_acc = 0
         best_model = None
         for lr in lerning_rates:
             for ws in weights_decay:
-                model = trainModel(network, lr, 2, 1, ws)
+                model = trainModel(getNetwork(network, "model-gs.pt"), lr, 2, 1, ws)
                 acc = model.check_val_accuracy()
                 print('lr %e ws %e val accuracy: %f' % (lr, ws, acc))
                 if (best_acc < acc):

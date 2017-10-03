@@ -4,7 +4,7 @@ from torch.autograd import Variable
 
 
 class Train(object):
-    def __init__(self, Model, loader, model_filename='model.pt', create_new=False, print_every=10):
+    def __init__(self, Model, loader, model_filename='model.pt', create_new=False, print_every=10, verbose = True):
         self.data_type = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
         self.model_filename = model_filename
         self.create_new = create_new
@@ -100,3 +100,5 @@ class Train(object):
         acc = float(num_correct) / num_samples
         print('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
         return acc;
+
+
