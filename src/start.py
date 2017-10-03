@@ -31,7 +31,6 @@ def trainModel(network, start_lr, epochs, decay_steps, weight_decay=1e-3):
     for i in range(decay_steps):
         decay = 10 ** i
         lr = start_lr / decay
-        print(lr)
         network.train(loss_fn, optim.Adam(network.model.parameters(), lr=lr, weight_decay=weight_decay),
                       num_epochs=epochs)
     return network
