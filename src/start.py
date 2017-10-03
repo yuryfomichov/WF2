@@ -12,7 +12,7 @@ from models.postermodel import PosterModel
 from torch.autograd import Variable
 
 
-def getNetwork(model, file_name, create_new=True):
+def getNetwork(model, file_name, create_new=True, verbose=True):
     loader = DatasetLoader({
         'batch_size': 300,
         'num_workers': 10 if torch.cuda.is_available() else 0
@@ -21,18 +21,19 @@ def getNetwork(model, file_name, create_new=True):
                     loader,
                     model_filename=file_name,
                     create_new=create_new,
-                    print_every=1)
+                    print_every=1,
+                    verbose=verbose)
     return network
 
 
-def trainModel(network, start_lr, epochs, decay_steps, weight_decay=1e-3, verbose=True):
+def trainModel(network, start_lr, epochs, decay_steps, weight_decay=1e-3):
     loss_fn = nn.CrossEntropyLoss().type(network.data_type)
     for i in range(decay_steps):
         decay = 10 ** i
         lr = start_lr / decay
         print(lr)
         network.train(loss_fn, optim.Adam(network.model.parameters(), lr=lr, weight_decay=weight_decay),
-                      num_epochs=epochs, verbose=verbose)
+                      num_epochs=epochs)
     return network
 
 
@@ -64,7 +65,7 @@ def gridSearch():
         best_model = None
         for lr in lerning_rates:
             for ws in weights_decay:
-                model = trainModel(getNetwork(network, "model-gs.pt"), lr, 2, 1, ws, verbose=False)
+                model = trainModel(getNetwork(network, "model-gs.pt", verbose=False), lr, 2, 1, ws)
                 acc = model.check_val_accuracy()
                 print('lr %e ws %e val accuracy: %f' % (lr, ws, acc))
                 if (best_acc < acc):
