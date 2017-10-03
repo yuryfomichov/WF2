@@ -109,7 +109,8 @@ class Train(object):
                 break;
 
         acc = float(num_correct) / num_samples
-        print('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
+        if self.verbose:
+            print('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
         return acc;
 
 

@@ -71,7 +71,7 @@ def gridSearch():
                 if (best_acc < acc):
                     best_acc = acc
                     best_model = (lr, ws, acc)
-
+        print('----- Best Results -----')
         print('lr %e ws %e val accuracy: %f' % (best_model[0], best_model[1], best_model[2]))
 
 
