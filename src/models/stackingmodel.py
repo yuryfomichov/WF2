@@ -38,7 +38,7 @@ class StackingModel(nn.Module):
         scores9 = self.model9(x, x1).data.max(1)[1].unsqueeze(0).float()
 
         scores = torch.cat((scores1, scores2, scores3, scores4, scores5, scores6, scores7, scores8, scores9)).transpose(0, 1)
-        y = self.classifier(Variable(torch.FloatTensor(scores), requires_grad=False))
+        y = self.classifier(Variable(torch.cuda.FloatTensor(scores), requires_grad=False))
         return y
 
     def _get_model(self, Model, file_name):
