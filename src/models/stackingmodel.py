@@ -51,6 +51,7 @@ class StackingModel(nn.Module):
         except:
             pass
         model.eval()
+        self._require_grad_false(model)
         return model
 
     def _initialize_weights(self):
@@ -71,6 +72,6 @@ class StackingModel(nn.Module):
                 m.weight.data.normal_(0, 0.01)
                 m.bias.data.zero_()
 
-    def _require_grad_false(self):
-        for p in self.features.parameters():
+    def _require_grad_false(self, model):
+        for p in model.parameters():
             p.requires_grad = False
