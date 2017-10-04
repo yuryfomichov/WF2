@@ -15,7 +15,7 @@ from torch.autograd import Variable
 
 def getNetwork(model, file_name, create_new=True, verbose=True, shuffle=True):
     loader = DatasetLoader({
-        'batch_size': 100,
+        'batch_size': 80,
         'num_workers': 8 if torch.cuda.is_available() else 0,
         'shuffle': shuffle
     })
