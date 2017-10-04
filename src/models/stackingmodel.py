@@ -13,7 +13,13 @@ class StackingModel(nn.Module):
     def __init__(self, num_classes=2):
         super(StackingModel, self).__init__()
         self.classifier = nn.Sequential(
-            nn.Linear(9, num_classes)
+            nn.Linear(9, 2024),
+            nn.BatchNorm1d(2024),
+            nn.ReLU(True),
+            nn.Linear(2024, 2024),
+            nn.BatchNorm1d(2024),
+            nn.ReLU(True),
+            nn.Linear(2024, num_classes),
         )
         self.model1 = self._get_model(CombinedModel, "model1-1.pt")
         self.model2 = self._get_model(CombinedModel, "model1-2.pt")
