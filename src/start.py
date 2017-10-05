@@ -128,9 +128,9 @@ def majorityPrediction(x, x1, models):
 
 def checkAccAllModels():
     network1 = getNetwork(CombinedModel, "model1.pt", False)
-    network2 = getNetwork(CombinedModel, "model2.pt", False)
-    network3 = getNetwork(FeaturesModel, "model3.pt", False)
-    network4 = getNetwork(FeaturesModel, "model4.pt", False)
+    network2 = getNetwork(FeaturesModel, "model2.pt", False)
+    network3 = getNetwork(ImageModel, "model3.pt", False)
+    network4 = getNetwork(PosterModel, "model4.pt", False)
     #network5 = getNetwork(FeaturesModel, "model2-3.pt", False)
     #network6 = getNetwork(ImageModel, "model3-1.pt", False)
     #network7 = getNetwork(ImageModel, "model3-2.pt", False)
