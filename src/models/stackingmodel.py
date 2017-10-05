@@ -8,18 +8,21 @@ from .imagemodel import ImageModel
 from .postermodel import PosterModel
 from torch.autograd import Variable
 
+class StackingLayer(nn.Module):
+    def __init__(self):
+        super(StackingLayer, self).__init__()
+        self.data_type = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
+        self.layer = nn.Parameter(torch.ones(9).type(self.data_type))
+
+    def forward(self, x):
+        return torch.bmm(self.layer.unsqueeze(0).unsqueeze(1).expand(x.size(0), 1, len(self.layer)), x)
 
 class StackingModel(nn.Module):
     def __init__(self, num_classes=2):
         super(StackingModel, self).__init__()
+        self.data_type = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
         self.classifier = nn.Sequential(
-            nn.Linear(9, 2024),
-            nn.BatchNorm1d(2024),
-            nn.ReLU(True),
-            nn.Linear(2024, 2024),
-            nn.BatchNorm1d(2024),
-            nn.ReLU(True),
-            nn.Linear(2024, num_classes),
+            StackingLayer()
         )
         self.model1 = self._get_model(CombinedModel, "model1-1.pt")
         self.model2 = self._get_model(CombinedModel, "model1-2.pt")
@@ -33,19 +36,19 @@ class StackingModel(nn.Module):
         self._initialize_weights()
 
     def forward(self, x, x1):
-        scores1 = self.model1(x, x1).data.max(1)[1].unsqueeze(0).float()
-        scores2 = self.model2(x, x1).data.max(1)[1].unsqueeze(0).float()
-        scores3 = self.model3(x, x1).data.max(1)[1].unsqueeze(0).float()
-        scores4 = self.model4(x, x1).data.max(1)[1].unsqueeze(0).float()
-        scores5 = self.model5(x, x1).data.max(1)[1].unsqueeze(0).float()
-        scores6 = self.model6(x, x1).data.max(1)[1].unsqueeze(0).float()
-        scores7 = self.model7(x, x1).data.max(1)[1].unsqueeze(0).float()
-        scores8 = self.model8(x, x1).data.max(1)[1].unsqueeze(0).float()
-        scores9 = self.model9(x, x1).data.max(1)[1].unsqueeze(0).float()
+        scores1 = nn.Softmax()(self.model1(x, x1)).unsqueeze(1)
+        scores2 = nn.Softmax()(self.model2(x, x1)).unsqueeze(1)
+        scores3 = nn.Softmax()(self.model3(x, x1)).unsqueeze(1)
+        scores4 = nn.Softmax()(self.model4(x, x1)).unsqueeze(1)
+        scores5 = nn.Softmax()(self.model5(x, x1)).unsqueeze(1)
+        scores6 = nn.Softmax()(self.model6(x, x1)).unsqueeze(1)
+        scores7 = nn.Softmax()(self.model7(x, x1)).unsqueeze(1)
+        scores8 = nn.Softmax()(self.model8(x, x1)).unsqueeze(1)
+        scores9 = nn.Softmax()(self.model9(x, x1)).unsqueeze(1)
 
-        scores = torch.cat((scores1, scores2, scores3, scores4, scores5, scores6, scores7, scores8, scores9)).transpose(0, 1)
-        y = self.classifier(Variable(torch.cuda.FloatTensor(scores), requires_grad=False))
-        return y
+        scores = torch.cat((scores1, scores2, scores3, scores4, scores5, scores6, scores7, scores8, scores9), 1)
+        y = self.classifier(scores)
+        return y.view(y.size(0), -1)
 
     def _get_model(self, Model, file_name):
         model = Model()
