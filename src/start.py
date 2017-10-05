@@ -49,7 +49,7 @@ def start():
     #network8 = trainModel(getNetwork(PosterModel, "model4-1.pt"), 5.993566e-04, 6, 3, 1.523906e-04)
     #network9 = trainModel(getNetwork(PosterModel, "model4-2.pt"), 5.993566e-04, 6, 4, 1.523906e-04)
 
-    stacking = trainModel(getNetwork(StackingModel, "stacking.pt"), 1e-02, 6, 3, 1e-04)
+    stacking = trainModel(getNetwork(StackingModel, "stacking.pt"), 1e-01, 6, 3, 1e-04)
 
     pass
 
