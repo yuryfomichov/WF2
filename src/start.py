@@ -15,7 +15,7 @@ from torch.autograd import Variable
 
 def getNetwork(model, file_name, create_new=True, verbose=True, shuffle=True):
     loader = DatasetLoader({
-        'batch_size': 350,
+        'batch_size': 325,
         'num_workers': 8 if torch.cuda.is_available() else 0,
         'shuffle': shuffle
     })
@@ -49,7 +49,7 @@ def start():
     #network8 = trainModel(getNetwork(PosterModel, "model4-1.pt"), 5.993566e-04, 6, 3, 1.523906e-04)
     #network9 = trainModel(getNetwork(PosterModel, "model4-2.pt"), 5.993566e-04, 6, 4, 1.523906e-04)
 
-    stacking = trainModel(getNetwork(StackingModel, "stacking.pt"), 1e-01, 10, 3, 0)
+    stacking = trainModel(getNetwork(StackingModel, "stacking.pt"), 1e-1, 6, 3, 1e-03)
 
     pass
 
@@ -127,27 +127,26 @@ def majorityPrediction(x, x1, models):
 
 
 def checkAccAllModels():
-    network1 = getNetwork(CombinedModel, "model1.pt", False)
-    network2 = getNetwork(FeaturesModel, "model2.pt", False)
-    network3 = getNetwork(ImageModel, "model3.pt", False)
-    network4 = getNetwork(PosterModel, "model4.pt", False)
-    #network5 = getNetwork(FeaturesModel, "model2-3.pt", False)
-    #network6 = getNetwork(ImageModel, "model3-1.pt", False)
-    #network7 = getNetwork(ImageModel, "model3-2.pt", False)
-    #network8 = getNetwork(PosterModel, "model4-1.pt", False)
-    #network9 = getNetwork(PosterModel, "model4-2.pt", False)
+    network1 = getNetwork(CombinedModel, "model1-1.pt", False)
+    network2 = getNetwork(CombinedModel, "model1-2.pt", False)
+    network3 = getNetwork(FeaturesModel, "model2-1.pt", False)
+    network4 = getNetwork(FeaturesModel, "model2-2.pt", False)
+    network5 = getNetwork(FeaturesModel, "model2-3.pt", False)
+    network6 = getNetwork(ImageModel, "model3-1.pt", False)
+    network7 = getNetwork(ImageModel, "model3-2.pt", False)
+    network8 = getNetwork(PosterModel, "model4-1.pt", False)
+    network9 = getNetwork(PosterModel, "model4-2.pt", False)
     stacking = getNetwork(StackingModel, "stacking.pt", False)
 
     models = [network1.model,
               network2.model,
               network3.model,
-              network4.model
-              #network5.model,
-              #network6.model,
-              #network7.model,
-              #network8.model,
-              #network9.model
-              ]
+              network4.model,
+              network5.model,
+              network6.model,
+              network7.model,
+              network8.model,
+              network9.model]
 
     loader = DatasetLoader({
         'batch_size': 235,
@@ -158,17 +157,18 @@ def checkAccAllModels():
     network2.check_test_accuracy()
     network3.check_test_accuracy()
     network4.check_test_accuracy()
-    #network5.check_test_accuracy()
-    #network6.check_test_accuracy()
-    #network7.check_test_accuracy()
-    #network8.check_test_accuracy()
-    #network9.check_test_accuracy()
+    network5.check_test_accuracy()
+    network6.check_test_accuracy()
+    network7.check_test_accuracy()
+    network8.check_test_accuracy()
+    network9.check_test_accuracy()
     print('Average Probability Accurancy')
     check_accuracy(loader.get_test_loader(), models, probabilityPrediction)
     print('Majority Prediction Accurancy')
     check_accuracy(loader.get_test_loader(), models, majorityPrediction)
     print('Stacking Accurancy')
     stacking.check_test_accuracy()
+
 
 start()
 checkAccAllModels()
