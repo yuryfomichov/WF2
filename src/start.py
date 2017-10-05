@@ -170,7 +170,6 @@ def checkAccAllModels():
     print('Stacking Accurancy')
     stacking.check_test_accuracy()
 
-checkAccAllModels()
 start()
 checkAccAllModels()
 #gridSearch()
