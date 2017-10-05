@@ -33,7 +33,6 @@ class StackingModel(nn.Module):
         self.model7 = self._get_model(ImageModel, "model3-2.pt")
         self.model8 = self._get_model(PosterModel, "model4-1.pt")
         self.model9 = self._get_model(PosterModel, "model4-2.pt")
-        self._initialize_weights()
 
     def forward(self, x, x1):
         scores1 = nn.Softmax()(self.model1(x, x1)).unsqueeze(1)
@@ -60,24 +59,6 @@ class StackingModel(nn.Module):
         model.eval()
         self._require_grad_false(model)
         return model
-
-    def _initialize_weights(self):
-        for m in self.modules():
-            if isinstance(m, nn.Conv2d):
-                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-                m.weight.data.normal_(0, math.sqrt(2. / n))
-                if m.bias is not None:
-                    m.bias.data.zero_()
-            elif isinstance(m, nn.BatchNorm2d):
-                m.weight.data.fill_(1)
-                m.bias.data.zero_()
-            elif isinstance(m, nn.BatchNorm1d):
-                m.weight.data.fill_(1)
-                m.bias.data.zero_()
-            elif isinstance(m, nn.Linear):
-                n = m.weight.size(1)
-                m.weight.data.normal_(0, 0.01)
-                m.bias.data.zero_()
 
     def _require_grad_false(self, model):
         for p in model.parameters():
