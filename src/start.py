@@ -33,23 +33,23 @@ def trainModel(network, start_lr, epochs, decay_steps, weight_decay=1e-3):
     for i in range(decay_steps):
         decay = 10 ** i
         lr = start_lr / decay
-        network.train(loss_fn, optim.Adam(network.model.classifier.parameters(), lr=lr, weight_decay=weight_decay),
+        network.train(loss_fn, optim.Adam(network.model.parameters(), lr=lr, weight_decay=weight_decay),
                       num_epochs=epochs)
     return network
 
 
 def start():
     #network1 = trainModel(getNetwork(CombinedModel, "model1-1.pt"), 1.092705e-02, 6, 3, 9.722207e-04)
-    #network2 = trainModel(getNetwork(CombinedModel, "model1-2.pt"), 1.092705e-02, 6, 4, 9.722207e-04)
-    #network3 = trainModel(getNetwork(FeaturesModel, "model2-1.pt"), 2.996677e-02, 6, 3, 1.523906e-04)
+    network2 = trainModel(getNetwork(CombinedModel, "model1-2.pt"), 1.092705e-02, 6, 4, 9.722207e-04)
+    network3 = trainModel(getNetwork(FeaturesModel, "model2-1.pt"), 2.996677e-02, 6, 3, 1.523906e-04)
     #network4 = trainModel(getNetwork(FeaturesModel, "model2-2.pt"), 2.996677e-02, 6, 3, 1.523906e-04)
     #network5 = trainModel(getNetwork(FeaturesModel, "model2-3.pt"), 2.996677e-02, 6, 3, 1.523906e-04)
     #network6 = trainModel(getNetwork(ImageModel, "model3-1.pt"), 2.996677e-02, 6, 3, 1.523906e-04)
     #network7 = trainModel(getNetwork(ImageModel, "model3-2.pt"), 2.996677e-02, 6, 3, 1.523906e-04)
     #network8 = trainModel(getNetwork(PosterModel, "model4-1.pt"), 5.993566e-04, 6, 3, 1.523906e-04)
-    #network9 = trainModel(getNetwork(PosterModel, "model4-2.pt"), 5.993566e-04, 6, 4, 1.523906e-04)
+    network9 = trainModel(getNetwork(PosterModel, "model4-2.pt"), 5.993566e-04, 6, 4, 1.523906e-04)
 
-    stacking = trainModel(getNetwork(StackingModel, "stacking.pt"), 1e-1, 6, 3, 1e-03)
+    #stacking = trainModel(getNetwork(StackingModel, "stacking.pt"), 1e-1, 6, 3, 1e-03)
 
     pass
 
