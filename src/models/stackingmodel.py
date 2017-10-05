@@ -12,7 +12,7 @@ class StackingLayer(nn.Module):
     def __init__(self):
         super(StackingLayer, self).__init__()
         self.data_type = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
-        self.layer = nn.Parameter(torch.ones(9).type(self.data_type))
+        self.layer = nn.Parameter(torch.ones(4).type(self.data_type))
 
     def forward(self, x):
         return torch.bmm(self.layer.unsqueeze(0).unsqueeze(1).expand(x.size(0), 1, len(self.layer)), x)
